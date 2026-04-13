@@ -5,8 +5,8 @@ const PLAN_FEATURES = [
   'Dashboard + exportes PDF y Excel',
   'Rolling forecast trimestral',
   'Simulador P&L completo',
-  'Chat CFO sin limites',
-  '1 sesion de revision por videollamada',
+  'Chat CFO sin límites',
+  '1 sesión de revisión por videollamada',
 ];
 
 export default function TrialExpiredPage() {
@@ -15,7 +15,7 @@ export default function TrialExpiredPage() {
       <div className="w-full max-w-[460px] text-center">
         <div className="mb-3.5 text-[44px]">🔒</div>
         <h2 className="mb-2.5 text-[22px] font-extrabold text-white">
-          Tu prueba de 7 dias ha terminado
+          Tu prueba de 7 días ha terminado
         </h2>
         <p className="mb-7 text-[13px] leading-relaxed text-muted-foreground">
           Viste el poder de tener un CFO Senior en tu negocio.

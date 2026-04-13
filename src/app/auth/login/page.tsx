@@ -56,7 +56,7 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block text-[10px] font-bold uppercase tracking-[2px] mb-2" style={{ color: '#7a756e' }}>
-              Correo electronico
+              Correo electrónico
             </label>
             <input
               type="email"
@@ -76,11 +76,11 @@ export default function LoginPage() {
 
           <div>
             <label className="block text-[10px] font-bold uppercase tracking-[2px] mb-2" style={{ color: '#7a756e' }}>
-              Contrasena
+              Contraseña
             </label>
             <input
               type="password"
-              placeholder="Tu contrasena"
+              placeholder="Tu contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full py-3 text-sm outline-none transition-all duration-200"
@@ -112,7 +112,7 @@ export default function LoginPage() {
           <p className="text-center text-xs" style={{ color: '#7a756e' }}>
             No tienes cuenta?{' '}
             <Link href="/auth/register" className="font-semibold transition-colors" style={{ color: '#d4a574' }}>
-              Registrate gratis
+              Regístrate gratis
             </Link>
           </p>
         </form>

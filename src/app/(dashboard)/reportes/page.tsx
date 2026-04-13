@@ -182,7 +182,7 @@ export default function ReportesPage() {
         <p className="micro-label mb-3">RESUMEN ACUMULADO</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <SummaryTile
-            title="ANO COMPLETO"
+            title="AÑO COMPLETO"
             subtitle={`Enero - Diciembre ${viewYear}`}
             variant="green"
             income={ytdKpis.income}

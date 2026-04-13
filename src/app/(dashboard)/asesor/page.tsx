@@ -66,7 +66,7 @@ function scoreColor(score: number): string {
 function scoreLabel(score: number): string {
   if (score >= 70) return 'Saludable';
   if (score >= 40) return 'Alerta';
-  return 'Critico';
+  return 'Crítico';
 }
 
 export default function AsesorPage() {
@@ -208,7 +208,7 @@ export default function AsesorPage() {
                     {scoreLabel(client.healthScore)}
                   </span>
                   <span className="text-[10px] text-dim">
-                    Ultimo: {client.lastActivity}
+                    Último: {client.lastActivity}
                   </span>
                 </div>
                 <button
@@ -240,11 +240,11 @@ export default function AsesorPage() {
           >
             <p className="text-4xl mb-3">🚀</p>
             <h3 className="text-sm font-bold text-foreground mb-2">
-              Proximamente: gestion multi-cliente
+              Próximamente: gestión multi-cliente
             </h3>
             <p className="text-xs text-muted-foreground mb-4">
-              La vista detallada de cada cliente estara disponible en la proxima
-              version. Podras ver dashboards individuales, generar reportes y
+              La vista detallada de cada cliente estará disponible en la próxima
+              versión. Podrás ver dashboards individuales, generar reportes y
               gestionar transacciones por empresa.
             </p>
             <Button onClick={() => setSelectedClient(null)} size="sm">

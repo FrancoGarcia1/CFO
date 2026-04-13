@@ -7,9 +7,9 @@ import Link from 'next/link';
 
 const FIELDS = [
   { name: 'nombre', label: 'Nombre completo', placeholder: 'Juan Garcia', type: 'text' },
-  { name: 'email', label: 'Correo electronico', placeholder: 'juan@empresa.com', type: 'email' },
-  { name: 'password', label: 'Contrasena', placeholder: 'Minimo 6 caracteres', type: 'password' },
-  { name: 'telefono', label: 'Telefono / WhatsApp', placeholder: '+51 999 999 999', type: 'tel' },
+  { name: 'email', label: 'Correo electrónico', placeholder: 'juan@empresa.com', type: 'email' },
+  { name: 'password', label: 'Contraseña', placeholder: 'Mínimo 6 caracteres', type: 'password' },
+  { name: 'telefono', label: 'Teléfono / WhatsApp', placeholder: '+51 999 999 999', type: 'tel' },
   { name: 'empresa', label: 'Empresa (opcional)', placeholder: 'Mi Empresa SAC', type: 'text' },
 ] as const;
 
@@ -30,9 +30,9 @@ export default function RegisterPage() {
     setError('');
 
     if (!form.nombre.trim()) { setError('Ingresa tu nombre'); return; }
-    if (!form.email.includes('@')) { setError('Email invalido'); return; }
-    if (form.password.length < 6) { setError('La contrasena debe tener al menos 6 caracteres'); return; }
-    if (form.telefono.replace(/\D/g, '').length < 9) { setError('Telefono invalido'); return; }
+    if (!form.email.includes('@')) { setError('Email inválido'); return; }
+    if (form.password.length < 6) { setError('La contraseña debe tener al menos 6 caracteres'); return; }
+    if (form.telefono.replace(/\D/g, '').length < 9) { setError('Teléfono inválido'); return; }
 
     setLoading(true);
 
@@ -76,7 +76,7 @@ export default function RegisterPage() {
           Comienza tu prueba gratuita
         </h2>
         <p className="mb-8 text-sm" style={{ color: '#7a756e' }}>
-          7 dias gratis · Sin tarjeta de credito
+          7 días gratis · Sin tarjeta de crédito
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -125,7 +125,7 @@ export default function RegisterPage() {
           <p className="text-center text-xs" style={{ color: '#7a756e' }}>
             Ya tienes cuenta?{' '}
             <Link href="/auth/login" className="font-semibold transition-colors" style={{ color: '#d4a574' }}>
-              Inicia sesion
+              Inicia sesión
             </Link>
           </p>
         </form>

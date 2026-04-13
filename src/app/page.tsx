@@ -3,10 +3,10 @@ import Image from 'next/image';
 import { TextScramble, AnimatedCounter, MagneticButton, MorphingBlob, SpotlightHero } from '@/components/landing/wow-effects';
 
 const FEATURES = [
-  { n: '01', title: 'Dashboard financiero', desc: 'Health Score, KPIs, margenes, EBITDA y punto de equilibrio actualizados al instante.' },
-  { n: '02', title: 'Forecast inteligente', desc: 'Proyecciones con ajuste trimestral automatico basado en tu desempeno real.' },
+  { n: '01', title: 'Dashboard financiero', desc: 'Health Score, KPIs, márgenes, EBITDA y punto de equilibrio actualizados al instante.' },
+  { n: '02', title: 'Forecast inteligente', desc: 'Proyecciones con ajuste trimestral automático basado en tu desempeño real.' },
   { n: '03', title: 'Simulador P&L', desc: 'Cambia variables y ve el impacto inmediato en tu estado de resultados.' },
-  { n: '04', title: 'Consultor estrategico', desc: 'Hazle cualquier pregunta. Responde con tus datos financieros reales.' },
+  { n: '04', title: 'Consultor estratégico', desc: 'Hazle cualquier pregunta. Responde con tus datos financieros reales.' },
 ];
 
 const TICKER_TEXT = 'DASHBOARD · FORECAST · SIMULADOR · CONSULTOR · REPORTES · EBITDA · HEALTH SCORE · P&L · ';
@@ -101,7 +101,7 @@ export default function LandingPage() {
 
                 <p className="e3 max-w-lg text-sm md:text-base leading-relaxed mb-10" style={{ color: 'var(--dim)' }}>
                   Registra, analiza y proyecta las finanzas de tu negocio con la
-                  guia de un director financiero con mas de 15 anos de experiencia.
+                  guía de un director financiero con más de 8 años de experiencia.
                   Disponible cuando lo necesites.
                 </p>
 
@@ -111,7 +111,7 @@ export default function LandingPage() {
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                   </MagneticButton>
                   <span className="text-[11px] pt-3" style={{ color: 'var(--dim)' }}>
-                    7 dias gratis · Sin tarjeta
+                    7 días gratis · Sin tarjeta
                   </span>
                 </div>
 
@@ -127,7 +127,7 @@ export default function LandingPage() {
                   </div>
                   <div>
                     <div className="text-xl md:text-2xl font-mono font-bold" style={{ color: 'var(--copper)' }}>&lt;2min</div>
-                    <div className="text-[9px] uppercase tracking-[1.5px] mt-1" style={{ color: 'var(--dim)' }}>Diagnostico</div>
+                    <div className="text-[9px] uppercase tracking-[1.5px] mt-1" style={{ color: 'var(--dim)' }}>Diagnóstico</div>
                   </div>
                 </div>
               </div>
@@ -144,7 +144,7 @@ export default function LandingPage() {
                 <div className="absolute bottom-6 left-0 right-0 px-4">
                   <div className="pl-4" style={{ borderLeft: '3px solid var(--copper)' }}>
                     <div className="text-lg font-bold" style={{ color: 'var(--ivory)' }}>Franco Garcia</div>
-                    <div className="text-[11px] font-mono" style={{ color: 'var(--dim)' }}>CFO Senior · MBA UNI · +8 anos</div>
+                    <div className="text-[11px] font-mono" style={{ color: 'var(--dim)' }}>CFO Senior · MBA UNI · +8 años</div>
                   </div>
                 </div>
               </div>
@@ -173,7 +173,7 @@ export default function LandingPage() {
                   Todo lo que un<br/>CFO hace.
                 </h2>
                 <p className="text-sm mt-4 leading-relaxed" style={{ color: 'var(--dim)' }}>
-                  Automatizado, disponible siempre, a una fraccion del costo.
+                  Automatizado, disponible siempre, a una fracción del costo.
                 </p>
               </div>
               <div className="flex-1">
@@ -199,7 +199,7 @@ export default function LandingPage() {
         <div className="py-3 overflow-hidden" style={{ borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
           <div className="ticker">
             <div className="ticker-track font-bold text-[11px] tracking-[3px] uppercase" style={{ color: 'var(--copper)', opacity: 0.35, animationDirection: 'reverse' }}>
-              {('REGISTRO · ANALISIS · PROYECCION · DECISIONES · CONTROL · CRECIMIENTO · ').repeat(6)}
+              {('REGISTRO · ANÁLISIS · PROYECCIÓN · DECISIONES · CONTROL · CRECIMIENTO · ').repeat(6)}
             </div>
           </div>
         </div>
@@ -210,7 +210,7 @@ export default function LandingPage() {
             {/* Bio */}
             <div className="rounded-lg p-8 md:p-10" style={{ background: 'var(--bg2)', border: '1px solid var(--border)' }}>
               <p className="text-[10px] font-bold uppercase tracking-[4px] mb-6" style={{ color: 'var(--copper)' }}>
-                Quien esta detras
+                Quién está detrás
               </p>
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0" style={{ border: '2px solid var(--copper)' }}>
@@ -222,12 +222,12 @@ export default function LandingPage() {
                 </div>
               </div>
               <p className="text-sm leading-relaxed" style={{ color: 'var(--dim)' }}>
-                Administrador de Empresas con mas de 8 anos en finanzas corporativas.
-                Gerente en empresas lideres del pais, en areas de planeamiento
-                estrategico y control de gestion.
+                Administrador de Empresas con más de 8 años en finanzas corporativas.
+                Gerente en empresas líderes del país, en áreas de planeamiento
+                estratégico y control de gestión.
               </p>
               <div className="flex flex-wrap gap-2 mt-6">
-                {['MBA UNI', '+8 anos', 'Finanzas', 'Estrategia'].map((t) => (
+                {['MBA UNI', '+8 años', 'Finanzas', 'Estrategia'].map((t) => (
                   <span key={t} className="text-[10px] font-mono font-medium px-3 py-1.5 uppercase tracking-wider" style={{ background: 'var(--bg3)', color: 'var(--cream)', border: '1px solid var(--border)' }}>
                     {t}
                   </span>
@@ -239,7 +239,7 @@ export default function LandingPage() {
             <div className="flex flex-col justify-between">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[4px] mb-6" style={{ color: 'var(--copper)' }}>
-                  Inversion
+                  Inversión
                 </p>
                 <div className="flex items-baseline gap-3 mb-4">
                   <AnimatedCounter value={800} className="text-6xl md:text-7xl font-mono font-bold tracking-tighter" style={{ color: 'var(--copper)' }} duration={2000} />

@@ -160,7 +160,7 @@ export function Header() {
                         <polyline points="16 17 21 12 16 7" />
                         <line x1="21" y1="12" x2="9" y2="12" />
                       </svg>
-                      Cerrar sesion
+                      Cerrar sesión
                     </button>
                   </div>
                 </div>
@@ -215,10 +215,10 @@ export function Header() {
 
               <div className="p-4 rounded-lg" style={{ background: '#242424', border: '1px solid #2a2a2a' }}>
                 <div className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: '#d4a574' }}>
-                  Horario de atencion
+                  Horario de atención
                 </div>
                 <p className="text-sm" style={{ color: '#7a756e' }}>
-                  Lunes a Viernes, 9:00 AM — 6:00 PM (hora Peru)
+                  Lunes a Viernes, 9:00 AM — 6:00 PM (hora Perú)
                 </p>
               </div>
             </div>

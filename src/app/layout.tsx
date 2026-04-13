@@ -6,7 +6,7 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'vCFO·AI — Tu CFO Senior Virtual',
   description:
-    'IA que registra tus finanzas, analiza tu P&L, genera proyecciones y te dice exactamente qué hacer — como un CFO con 15 años de experiencia.',
+    'IA que registra tus finanzas, analiza tu P&L, genera proyecciones y te dice exactamente qué hacer — como un CFO con 8 años de experiencia.',
 };
 
 export default function RootLayout({

@@ -21,10 +21,10 @@ function daysInMonth(year: number, month: number): number {
 }
 
 const PERIODS: { value: ViewPeriod; label: string }[] = [
-  { value: 'day', label: 'Dia' },
+  { value: 'day', label: 'Día' },
   { value: 'week', label: 'Semana' },
   { value: 'month', label: 'Mes' },
-  { value: 'year', label: 'Ano' },
+  { value: 'year', label: 'Año' },
 ];
 
 function getPeriodLabel(period: ViewPeriod, year: number, month: number, day?: number): string {
@@ -32,7 +32,7 @@ function getPeriodLabel(period: ViewPeriod, year: number, month: number, day?: n
     case 'day': return day ? `${day} ${MONTHS[month]} ${year}` : `Hoy · ${MONTHS[month]} ${year}`;
     case 'week': return `Semana · ${MONTHS[month]}`;
     case 'month': return `${MONTHS[month]} ${year}`;
-    case 'year': return `Ano ${year}`;
+    case 'year': return `Año ${year}`;
   }
 }
 
@@ -156,11 +156,11 @@ export function PeriodSelector({
             {/* Handle */}
             <div className="w-10 h-1 rounded-full bg-border mx-auto mb-5" />
 
-            <h3 className="text-sm font-semibold text-foreground mb-4">Seleccionar periodo</h3>
+            <h3 className="text-sm font-semibold text-foreground mb-4">Seleccionar período</h3>
 
             {/* Period type */}
             <div className="mb-4">
-              <p className="micro-label mb-2">Periodo</p>
+              <p className="micro-label mb-2">Período</p>
               <div className="grid grid-cols-4 gap-2">
                 {PERIODS.map((p) => (
                   <button
@@ -181,7 +181,7 @@ export function PeriodSelector({
 
             {/* Year */}
             <div className="mb-4">
-              <p className="micro-label mb-2">Ano</p>
+              <p className="micro-label mb-2">Año</p>
               <div className="grid grid-cols-4 gap-2">
                 {years.map((year) => (
                   <button
@@ -226,7 +226,7 @@ export function PeriodSelector({
             {/* Day — only when period is 'day' */}
             {viewPeriod === 'day' && (
               <div className="mb-5">
-                <p className="micro-label mb-2">Dia</p>
+                <p className="micro-label mb-2">Día</p>
                 <div className="grid grid-cols-7 gap-1.5 max-h-[180px] overflow-y-auto">
                   {Array.from({ length: daysInMonth(viewYear, viewMonth) }, (_, i) => i + 1).map((day) => {
                     const isToday =

@@ -138,7 +138,7 @@ export default function DashboardPage() {
           { label: 'TRANSACC.', value: fmtN(kpis.countIncome), color: '#969593' },
           { label: 'TICKET', value: fmt(kpis.avgTicket), color: '#969593' },
           { label: 'VISITANTES', value: avgVisitors > 0 ? fmtN(avgVisitors) : '—', color: '#969593' },
-          { label: 'OCUPACION', value: avgOccupancy > 0 ? `${avgOccupancy.toFixed(1)}%` : '—', color: '#969593' },
+          { label: 'OCUPACIÓN', value: avgOccupancy > 0 ? `${avgOccupancy.toFixed(1)}%` : '—', color: '#969593' },
         ].map((kpi) => (
           <div
             key={kpi.label}
@@ -199,7 +199,7 @@ export default function DashboardPage() {
           Imprimir PDF
         </Button>
         <Button onClick={handleDiagnosis}>
-          Diagnostico CFO
+          Diagnóstico CFO
         </Button>
       </div>
     </div>

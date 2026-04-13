@@ -147,7 +147,7 @@ export default function CfoPage() {
                 Haz una pregunta sobre tu negocio
               </p>
               <p className="text-xs text-darker mt-1">
-                o selecciona una consulta rapida arriba
+                o selecciona una consulta rápida arriba
               </p>
             </div>
           </div>

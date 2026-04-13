@@ -70,7 +70,7 @@ export async function POST(request: Request) {
 
       if (rl && rl.length > 0 && !rl[0].allowed) {
         return NextResponse.json(
-          { error: 'Limite de 10 consultas/hora alcanzado.' },
+          { error: 'Límite de 10 consultas/hora alcanzado.' },
           { status: 429, headers: { 'Retry-After': '3600' } }
         );
       }
@@ -82,7 +82,7 @@ export async function POST(request: Request) {
 
     if (!messages || !Array.isArray(messages)) {
       return NextResponse.json(
-        { error: 'Formato de mensaje invalido' },
+        { error: 'Formato de mensaje inválido' },
         { status: 400 }
       );
     }
@@ -109,7 +109,7 @@ export async function POST(request: Request) {
       });
       geminiContents.push({
         role: 'model' as const,
-        parts: [{ text: 'Entendido. Soy Franco Garcia, tu CFO Senior Virtual. Estoy listo para analizar tu negocio siguiendo mis instrucciones. ¿En que te puedo ayudar?' }],
+        parts: [{ text: 'Entendido. Soy Franco Garcia, tu CFO Senior Virtual. Estoy listo para analizar tu negocio siguiendo mis instrucciones. ¿En qué te puedo ayudar?' }],
       });
     }
 
