@@ -130,11 +130,11 @@ export default function RegisterChatPage() {
     <div
       className="flex flex-col relative overflow-hidden"
       style={{
-        minHeight: '100dvh',
-        height: '100dvh',
+        // 100svh = small viewport, siempre respeta barras visibles de iOS Safari
+        minHeight: '100svh',
+        height: '100svh',
         background: '#050404',
         fontFamily: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif",
-        paddingBottom: 'env(safe-area-inset-bottom)',
       }}
     >
       {/* ═══ MESH GRADIENT BACKGROUND (animated) ═══ */}
@@ -404,9 +404,10 @@ export default function RegisterChatPage() {
             </div>
 
             {/* Input dock */}
-            <div className="px-4 md:px-5 py-3.5" style={{
+            <div className="px-4 md:px-5 pt-3.5" style={{
               background: 'linear-gradient(180deg, transparent 0%, rgba(10,10,10,.3) 100%)',
               borderTop: '1px solid rgba(255,255,255,.04)',
+              paddingBottom: 'max(14px, env(safe-area-inset-bottom))',
             }}>
               {isWelcome ? (
                 <button
