@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { MagneticButton, SpotlightHero } from '@/components/landing/wow-effects';
+import { DashboardReveal } from '@/components/landing/dashboard-reveal';
 
 const NAV_LINKS = [
   { href: '#servicios', label: 'Servicios' },
@@ -254,6 +255,9 @@ export default function LandingPage() {
 
           </div>
         </SpotlightHero>
+
+        {/* ═══ DASHBOARD REVEAL — scroll storytelling ═══ */}
+        <DashboardReveal />
 
         {/* ═══ SERVICIOS SECTION ═══ */}
         <section id="servicios" className="px-6 md:px-12 lg:px-20 py-20 md:py-28" style={{ borderTop: '1px solid var(--border)' }}>
