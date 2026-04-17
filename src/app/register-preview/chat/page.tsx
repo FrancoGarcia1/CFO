@@ -37,6 +37,7 @@ export default function RegisterChatPage() {
   const [showTrust, setShowTrust] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
   const typingStepRef = useRef<number>(-1);
   const [isTouch, setIsTouch] = useState(false);
   const step = SCRIPT[stepIdx];
@@ -46,11 +47,32 @@ export default function RegisterChatPage() {
     setIsTouch(mq.matches);
   }, []);
 
+  // ═══ visualViewport listener: ajusta altura cuando abre el teclado ═══
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    function update() {
+      if (!rootRef.current || !vv) return;
+      rootRef.current.style.height = `${vv.height}px`;
+      // Al cambiar el alto (teclado abriéndose), scroll al último mensaje
+      setTimeout(() => {
+        scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
+      }, 50);
+    }
+    update();
+    vv.addEventListener('resize', update);
+    vv.addEventListener('scroll', update);
+    return () => {
+      vv.removeEventListener('resize', update);
+      vv.removeEventListener('scroll', update);
+    };
+  }, []);
+
   function handleInputFocus() {
-    // En mobile: al abrir el teclado, scroll al último mensaje para que se vea
+    // Al tocar input: scroll al último mensaje con delay por si abre teclado
     setTimeout(() => {
       scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
-    }, 300);
+    }, 350);
   }
 
   const questionSteps = SCRIPT.filter((s) => s.field !== null).length;
@@ -128,10 +150,11 @@ export default function RegisterChatPage() {
 
   return (
     <div
+      ref={rootRef}
       className="flex flex-col relative overflow-hidden"
       style={{
-        // 100svh = small viewport, siempre respeta barras visibles de iOS Safari
-        minHeight: '100svh',
+        // height se setea dinámicamente por visualViewport API (incluye teclado en iOS/Android)
+        // fallback: 100svh (small viewport — respeta URL bar de Safari)
         height: '100svh',
         background: '#050404',
         fontFamily: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif",
@@ -166,7 +189,7 @@ export default function RegisterChatPage() {
       }}/>
 
       {/* ═══ TOP NAV — LIQUID GLASS ═══ */}
-      <nav className="relative z-30 flex items-center justify-between px-5 md:px-8 py-3.5" style={{
+      <nav className="flex-shrink-0 relative z-30 flex items-center justify-between px-4 md:px-8 py-3" style={{
         background: 'rgba(8,6,6,.55)',
         backdropFilter: 'saturate(180%) blur(32px)',
         WebkitBackdropFilter: 'saturate(180%) blur(32px)',
@@ -203,7 +226,7 @@ export default function RegisterChatPage() {
       </nav>
 
       {/* Hairline progress */}
-      <div className="relative h-[1px] z-30" style={{ background: 'rgba(255,255,255,.04)' }}>
+      <div className="flex-shrink-0 relative h-[1px] z-30" style={{ background: 'rgba(255,255,255,.04)' }}>
         <div
           className="absolute inset-y-0 left-0 transition-all duration-700 ease-out"
           style={{
@@ -215,8 +238,8 @@ export default function RegisterChatPage() {
       </div>
 
       {/* ═══ MAIN ═══ */}
-      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-5 md:px-8 py-6 md:py-10">
-        <div className="w-full max-w-[620px] flex flex-col flex-1 relative">
+      <main className="relative z-10 flex-1 min-h-0 flex flex-col items-center px-3 md:px-8 py-3 md:py-10 overflow-hidden">
+        <div className="w-full max-w-[620px] flex flex-col flex-1 min-h-0 relative">
           {/* Apple Intelligence-style animated glow ring */}
           <div
             className="absolute inset-0 rounded-[32px] pointer-events-none"
@@ -230,8 +253,8 @@ export default function RegisterChatPage() {
             }}
           />
 
-          {/* Crystalline glass surface */}
-          <div className="relative flex flex-col flex-1 rounded-[24px] overflow-hidden" style={{
+          {/* Crystalline glass surface — flex-1 para llenar espacio disponible */}
+          <div className="relative flex flex-col flex-1 min-h-0 rounded-[24px] overflow-hidden" style={{
             background: 'linear-gradient(135deg, rgba(22,19,16,.72) 0%, rgba(13,11,10,.6) 100%)',
             backdropFilter: 'saturate(180%) blur(40px)',
             WebkitBackdropFilter: 'saturate(180%) blur(40px)',
@@ -239,10 +262,8 @@ export default function RegisterChatPage() {
             boxShadow: `
               0 1px 0 rgba(255,255,255,.04) inset,
               0 -1px 0 rgba(0,0,0,.4) inset,
-              0 60px 120px -20px rgba(0,0,0,.8),
-              0 0 0 1px rgba(200,161,90,.04)
+              0 40px 100px -20px rgba(0,0,0,.8)
             `,
-            minHeight: 'calc(100vh - 220px)',
           }}>
             {/* Top specular highlight */}
             <div className="absolute top-0 left-[10%] right-[10%] h-px" style={{
@@ -250,7 +271,7 @@ export default function RegisterChatPage() {
             }}/>
 
             {/* CFO persona header */}
-            <div className="flex items-center gap-3 px-5 md:px-6 py-4" style={{
+            <div className="flex-shrink-0 flex items-center gap-3 px-4 md:px-6 py-3" style={{
               borderBottom: '1px solid rgba(255,255,255,.05)',
             }}>
               {/* Apple Intelligence-style avatar with holographic ring */}
@@ -300,7 +321,7 @@ export default function RegisterChatPage() {
             </div>
 
             {/* Messages */}
-            <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 md:px-6 py-6 space-y-2.5">
+            <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto px-4 md:px-6 py-5 space-y-2.5" style={{ WebkitOverflowScrolling: 'touch' }}>
               {messages.map((msg, i) => {
                 const prev = messages[i - 1];
                 const isSameSender = prev?.role === msg.role;
@@ -404,10 +425,10 @@ export default function RegisterChatPage() {
             </div>
 
             {/* Input dock */}
-            <div className="px-4 md:px-5 pt-3.5" style={{
+            <div className="flex-shrink-0 px-4 md:px-5 pt-3" style={{
               background: 'linear-gradient(180deg, transparent 0%, rgba(10,10,10,.3) 100%)',
               borderTop: '1px solid rgba(255,255,255,.04)',
-              paddingBottom: 'max(14px, env(safe-area-inset-bottom))',
+              paddingBottom: 'max(12px, env(safe-area-inset-bottom))',
             }}>
               {isWelcome ? (
                 <button
@@ -506,8 +527,8 @@ export default function RegisterChatPage() {
             </div>
           </div>
 
-          {/* Footer */}
-          <div className="flex items-center justify-between mt-5 text-[11px]" style={{ color: 'rgba(245,240,232,.35)' }}>
+          {/* Footer — solo desktop (en mobile ocupa espacio crítico) */}
+          <div className="hidden sm:flex flex-shrink-0 items-center justify-between mt-4 text-[11px]" style={{ color: 'rgba(245,240,232,.35)' }}>
             <Link href="/auth/login" className="transition-colors hover:text-[color:#c8a15a]" style={{ color: 'rgba(200,161,90,.75)' }}>
               Iniciar sesión
             </Link>
