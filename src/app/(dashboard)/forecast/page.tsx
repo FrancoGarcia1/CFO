@@ -147,7 +147,7 @@ export default function ForecastPage() {
       `${r.compliance.toFixed(1)}%`,
     ]);
     const date = new Date().toISOString().slice(0, 10);
-    buildCSVAndDownload([headers, ...rows], `vCFO_Forecast_${date}.csv`);
+    buildCSVAndDownload([headers, ...rows], `CapitalCFO_Forecast_${date}.csv`);
   }
 
   function complianceColor(value: number): string {

@@ -301,7 +301,7 @@ export default function OnboardingPage() {
         </div>
         <div>
           <h1 className="text-base font-semibold text-foreground">
-            Franco García · CFO
+            Capital CFO
           </h1>
           <p className="text-xs text-muted-foreground">
             Configura tu perfil financiero

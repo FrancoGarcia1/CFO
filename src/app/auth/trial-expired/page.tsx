@@ -44,7 +44,7 @@ export default function TrialExpiredPage() {
           </div>
 
           <a
-            href="mailto:contacto@vcfo.ai?subject=Quiero activar Franco Garcia · Consultor Financiero"
+            href="mailto:contacto@vcfo.ai?subject=Quiero activar Capital CFO"
             className="bg-primary mt-5 block rounded-md py-3.5 text-sm font-bold text-black transition-colors hover:bg-primary/90"
           >
             Activar plan completo →

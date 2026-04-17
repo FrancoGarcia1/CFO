@@ -63,7 +63,7 @@ export function exportCSV(transactions: Transaction[]): void {
 
   const csv = buildCSV([headers, ...rows]);
   const date = new Date().toISOString().slice(0, 10);
-  downloadCSV(csv, `vCFO_Transacciones_${date}.csv`);
+  downloadCSV(csv, `CapitalCFO_Transacciones_${date}.csv`);
 }
 
 /**
@@ -96,7 +96,7 @@ export function exportPnLCSV(data: KPIs): void {
 
   const csv = buildCSV(rows);
   const date = new Date().toISOString().slice(0, 10);
-  downloadCSV(csv, `vCFO_PnL_${date}.csv`);
+  downloadCSV(csv, `CapitalCFO_PnL_${date}.csv`);
 }
 
 /**
@@ -234,7 +234,7 @@ export function exportPnLGerencialCSV(params: {
   ]);
 
   const csv = buildCSV(rows);
-  downloadCSV(csv, `vCFO_PnL_Gerencial_${year}.csv`);
+  downloadCSV(csv, `CapitalCFO_PnL_Gerencial_${year}.csv`);
 }
 
 /**
@@ -251,5 +251,5 @@ export function downloadTemplate(): void {
   ];
 
   const csv = buildCSV(rows);
-  downloadCSV(csv, 'plantilla_vCFO.csv');
+  downloadCSV(csv, 'plantilla_CapitalCFO.csv');
 }

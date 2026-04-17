@@ -42,7 +42,7 @@ export default function LoginPage() {
         {/* Header */}
         <div className="mb-8">
           <Link href="/" className="text-sm font-bold tracking-tight" style={{ color: '#f5f0eb' }}>
-            Franco Garcia<span style={{ color: '#d4a574' }}> · CFO</span>
+            Capital CFO
           </Link>
         </div>
 
@@ -120,7 +120,7 @@ export default function LoginPage() {
         {/* Decorative line */}
         <div className="mt-12 h-px" style={{ background: 'linear-gradient(90deg, transparent, #2a2a2a, transparent)' }} />
         <p className="mt-4 text-center text-[10px]" style={{ color: '#3a3a3a' }}>
-          Franco Garcia · Consultor Financiero
+          Capital CFO
         </p>
       </div>
     </div>

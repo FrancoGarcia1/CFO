@@ -109,7 +109,7 @@ export async function POST(request: Request) {
       });
       geminiContents.push({
         role: 'model' as const,
-        parts: [{ text: 'Entendido. Soy Franco Garcia, tu CFO Senior Virtual. Estoy listo para analizar tu negocio siguiendo mis instrucciones. ¿En qué te puedo ayudar?' }],
+        parts: [{ text: 'Entendido. Soy tu Capital CFO, tu CFO Senior Virtual. Estoy listo para analizar tu negocio siguiendo mis instrucciones. ¿En qué te puedo ayudar?' }],
       });
     }
 

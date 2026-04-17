@@ -14,9 +14,10 @@ import { useSettings } from '@/hooks/use-settings';
 import { usePeriod } from '@/app/(dashboard)/dashboard-shell';
 import { useKpis } from '@/hooks/use-kpis';
 import { useCfoChat } from '@/hooks/use-cfo-chat';
+import { useCurrency } from '@/hooks/use-currency';
 import { FinancialGoals } from '@/components/dashboard/financial-goals';
 import { MONTHS, COLORS } from '@/utils/constants';
-import { fmt, fmtN } from '@/utils/formatters';
+import { fmt as fmtBase, fmtN } from '@/utils/formatters';
 import { exportPnLCSV } from '@/utils/csv-export';
 
 export default function DashboardPage() {
@@ -27,6 +28,8 @@ export default function DashboardPage() {
   const { viewPeriod, viewYear, viewMonth } = usePeriod();
   const { kpis, monthlyData } = useKpis(transactions, viewPeriod, viewYear, viewMonth);
   const { runDiagnosis } = useCfoChat();
+  const { currency } = useCurrency();
+  const fmt = (n: number | null | undefined) => fmtBase(n, currency);
 
   const { avgVisitors, avgOccupancy } = useMemo(() => {
     const mVis = visitors.filter((v) => {
@@ -179,11 +182,11 @@ export default function DashboardPage() {
       <Card>
         <h3 className="micro-label mb-4">Estado de Resultados</h3>
         <div className="space-y-0">
-          <PnlRow label="Ingresos" amount={kpis.income} pct="100.0" bold />
-          <PnlRow label="(-) Costos" amount={-kpis.cost} pct={costPct} />
-          <PnlRow label="= Utilidad Bruta" amount={kpis.grossProfit} pct={kpis.margenBruto.toFixed(1)} bold />
-          <PnlRow label="(-) Gastos" amount={-kpis.expense} pct={expPct} />
-          <PnlRow label="= EBITDA" amount={kpis.ebitda} pct={kpis.margenEbitda.toFixed(1)} bold highlight />
+          <PnlRow label="Ingresos" amount={kpis.income} pct="100.0" bold fmt={fmt} />
+          <PnlRow label="(-) Costos" amount={-kpis.cost} pct={costPct} fmt={fmt} />
+          <PnlRow label="= Utilidad Bruta" amount={kpis.grossProfit} pct={kpis.margenBruto.toFixed(1)} bold fmt={fmt} />
+          <PnlRow label="(-) Gastos" amount={-kpis.expense} pct={expPct} fmt={fmt} />
+          <PnlRow label="= EBITDA" amount={kpis.ebitda} pct={kpis.margenEbitda.toFixed(1)} bold highlight fmt={fmt} />
         </div>
       </Card>
 
@@ -213,12 +216,14 @@ function PnlRow({
   pct,
   bold,
   highlight,
+  fmt,
 }: {
   label: string;
   amount: number;
   pct: string;
   bold?: boolean;
   highlight?: boolean;
+  fmt: (n: number) => string;
 }) {
   const weight = bold ? 'font-bold' : 'font-normal';
   const color = highlight

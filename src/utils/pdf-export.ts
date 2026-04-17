@@ -268,7 +268,7 @@ export function generatePDFReport(params: {
   </div>
 
   <div class="footer">
-    Generado por vCFO&middot;AI &mdash; Franco Garc&iacute;a &middot; Consultor Financiero
+    Generado por Capital CFO
   </div>
 
   <script>window.onload = function() { window.print(); }</script>

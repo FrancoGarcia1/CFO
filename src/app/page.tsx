@@ -70,7 +70,7 @@ export default function LandingPage() {
         {/* ═══ NAV ═══ */}
         <nav className="relative z-10 flex items-center justify-between px-5 py-5 md:px-10 lg:px-16" style={{ borderBottom: '1px solid var(--border)' }}>
           <span className="text-sm font-bold tracking-tight" style={{ color: 'var(--ivory)' }}>
-            Franco Garcia<span style={{ color: 'var(--copper)' }}> · CFO</span>
+            Capital CFO
           </span>
           <div className="flex items-center gap-5">
             <Link href="/auth/login" className="hidden sm:inline text-xs uppercase tracking-widest transition-colors" style={{ color: 'var(--dim)' }}>
@@ -143,8 +143,8 @@ export default function LandingPage() {
                 </div>
                 <div className="absolute bottom-6 left-0 right-0 px-4">
                   <div className="pl-4" style={{ borderLeft: '3px solid var(--copper)' }}>
-                    <div className="text-lg font-bold" style={{ color: 'var(--ivory)' }}>Franco Garcia</div>
-                    <div className="text-[11px] font-mono" style={{ color: 'var(--dim)' }}>CFO Senior · MBA UNI · +8 años</div>
+                    <div className="text-lg font-bold" style={{ color: 'var(--ivory)' }}>Capital CFO</div>
+                    <div className="text-[11px] font-mono" style={{ color: 'var(--dim)' }}>Asesoría Financiera</div>
                   </div>
                 </div>
               </div>
@@ -217,8 +217,8 @@ export default function LandingPage() {
                   <Image src="/franco.jpg" alt="Franco Garcia" width={64} height={64} className="w-full h-full object-cover object-top" />
                 </div>
                 <div>
-                  <div className="text-lg font-bold" style={{ color: 'var(--ivory)' }}>Franco Garcia</div>
-                  <div className="text-xs font-mono" style={{ color: 'var(--copper)' }}>CFO Senior · MBA UNI</div>
+                  <div className="text-lg font-bold" style={{ color: 'var(--ivory)' }}>Capital CFO</div>
+                  <div className="text-xs font-mono" style={{ color: 'var(--copper)' }}>Asesoría Financiera</div>
                 </div>
               </div>
               <p className="text-sm leading-relaxed" style={{ color: 'var(--dim)' }}>
@@ -272,7 +272,7 @@ export default function LandingPage() {
         {/* ═══ FOOTER ═══ */}
         <footer className="px-5 md:px-10 lg:px-16 py-8 flex flex-col sm:flex-row items-center justify-between gap-4" style={{ borderTop: '1px solid var(--border)' }}>
           <span className="text-[11px] font-mono" style={{ color: 'var(--dim)' }}>© 2026</span>
-          <span className="text-[11px]" style={{ color: 'var(--dim)' }}>Franco Garcia · Consultor Financiero</span>
+          <span className="text-[11px]" style={{ color: 'var(--dim)' }}>Capital CFO</span>
         </footer>
       </div>
     </div>

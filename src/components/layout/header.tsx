@@ -60,8 +60,7 @@ export function Header() {
       <header className="sticky top-0 z-50" style={{ background: '#1a1a1a' }}>
         <div className="mx-auto flex max-w-[1200px] items-center justify-between px-5 py-3">
           <span className="text-sm tracking-tight" style={{ color: '#f5f0eb' }}>
-            <span className="font-bold">Franco Garcia</span>
-            <span style={{ color: '#d4a574' }}> · CFO</span>
+            <span className="font-bold">Capital CFO</span>
           </span>
 
           <div className="flex items-center gap-2 sm:gap-3">
@@ -224,7 +223,7 @@ export function Header() {
             </div>
 
             <p className="mt-5 text-xs text-center" style={{ color: '#3a3a3a' }}>
-              Franco Garcia · Consultor Financiero
+              Capital CFO
             </p>
           </div>
         </div>

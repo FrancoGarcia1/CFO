@@ -96,7 +96,7 @@ export default function CfoPage() {
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-base font-bold text-foreground">
-                Franco Garcia
+                Capital CFO
               </h1>
               <span className="w-2 h-2 rounded-full bg-primary inline-block" />
             </div>
@@ -173,7 +173,7 @@ export default function CfoPage() {
             >
               {msg.role === 'assistant' && (
                 <p className="font-mono text-[10px] text-primary tracking-wider mb-1.5">
-                  Franco Garcia &middot; CFO
+                  Capital CFO
                 </p>
               )}
               {msg.role === 'assistant' ? (
@@ -198,7 +198,7 @@ export default function CfoPage() {
             </div>
             <div className="bg-surface border border-border rounded-2xl rounded-bl-sm px-4 py-3">
               <p className="font-mono text-[10px] text-primary tracking-wider mb-1.5">
-                Franco Garcia &middot; CFO
+                Capital CFO
               </p>
               <div className="flex items-center gap-1 py-1">
                 <span className="w-2 h-2 rounded-full bg-primary animate-dot-1" />

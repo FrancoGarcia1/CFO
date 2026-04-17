@@ -4,7 +4,7 @@ import { QueryProvider } from '@/providers/query-provider';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'vCFO·AI — Tu CFO Senior Virtual',
+  title: 'Capital CFO — Tu CFO Senior Virtual',
   description:
     'IA que registra tus finanzas, analiza tu P&L, genera proyecciones y te dice exactamente qué hacer — como un CFO con 8 años de experiencia.',
 };

@@ -103,7 +103,7 @@ export default function ReportesPage() {
       ];
     });
     const date = new Date().toISOString().slice(0, 10);
-    buildCSVAndDownload([headers, ...rows], `vCFO_ForecastVsReal_${date}.csv`);
+    buildCSVAndDownload([headers, ...rows], `CapitalCFO_ForecastVsReal_${date}.csv`);
   }
 
   const exportCards: ExportCard[] = [
