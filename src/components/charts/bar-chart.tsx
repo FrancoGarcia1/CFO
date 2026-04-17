@@ -11,7 +11,7 @@ interface BarChartProps {
 export function BarChart({
   data,
   height: _height,
-  color = '#45ffbc',
+  color = '#c8a15a',
   color2 = null,
   compact = false,
 }: BarChartProps) {
@@ -43,7 +43,7 @@ export function BarChart({
           y1={chartH - chartH * pct}
           x2={98}
           y2={chartH - chartH * pct}
-          stroke="#1a1a1a"
+          stroke="rgba(200,161,90,.1)"
           strokeWidth={0.3}
         />
       ))}
@@ -100,7 +100,7 @@ export function BarChart({
               x={x + barW / 2}
               y={vbH - 1}
               textAnchor="middle"
-              fill="#969593"
+              fill="rgba(245,240,232,.5)"
               fontSize={2.8}
               fontFamily="JetBrains Mono, monospace"
             >

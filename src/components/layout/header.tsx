@@ -57,15 +57,15 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50" style={{ background: '#1a1a1a' }}>
+      <header className="sticky top-0 z-50" style={{ background: '#0f0c0a' }}>
         <div className="mx-auto flex max-w-[1200px] items-center justify-between px-5 py-3">
-          <span className="text-sm tracking-tight" style={{ color: '#f5f0eb' }}>
+          <span className="text-sm tracking-tight" style={{ color: '#f5f0e8' }}>
             <span className="font-bold">Capital CFO</span>
           </span>
 
           <div className="flex items-center gap-2 sm:gap-3">
             <CurrencySelector />
-            <span className="text-xs hidden sm:inline" style={{ color: '#7a756e' }}>
+            <span className="text-xs hidden sm:inline" style={{ color: 'rgba(245,240,232,.55)' }}>
               {displayName || '···'}
             </span>
 
@@ -75,9 +75,9 @@ export function Header() {
                 onClick={() => setMenuOpen(!menuOpen)}
                 className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-200"
                 style={{
-                  background: menuOpen ? '#d4a574' : '#2a2a2a',
-                  color: menuOpen ? '#0f0f0f' : '#f5f0eb',
-                  border: '1px solid #3a3a3a',
+                  background: menuOpen ? '#c8a15a' : 'rgba(200,161,90,.2)',
+                  color: menuOpen ? '#0a0a0a' : '#f5f0e8',
+                  border: '1px solid rgba(200,161,90,.3)',
                 }}
                 title="Mi cuenta"
               >
@@ -89,31 +89,31 @@ export function Header() {
                 <div
                   className="absolute right-0 top-full mt-2 w-72 rounded-lg overflow-hidden shadow-2xl z-50"
                   style={{
-                    background: '#1a1a1a',
-                    border: '1px solid #2a2a2a',
+                    background: '#0f0c0a',
+                    border: '1px solid rgba(200,161,90,.2)',
                     animation: 'menuIn 0.15s ease forwards',
                   }}
                 >
                   {/* User info */}
-                  <div className="p-4" style={{ borderBottom: '1px solid #2a2a2a' }}>
+                  <div className="p-4" style={{ borderBottom: '1px solid rgba(200,161,90,.2)' }}>
                     <div className="flex items-center gap-3">
                       <div
                         className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0"
-                        style={{ background: '#d4a574', color: '#0f0f0f' }}
+                        style={{ background: '#c8a15a', color: '#0a0a0a' }}
                       >
                         {initial}
                       </div>
                       <div className="min-w-0">
-                        <div className="text-sm font-semibold truncate" style={{ color: '#f5f0eb' }}>
+                        <div className="text-sm font-semibold truncate" style={{ color: '#f5f0e8' }}>
                           {displayName}
                         </div>
-                        <div className="text-[11px] truncate" style={{ color: '#7a756e' }}>
+                        <div className="text-[11px] truncate" style={{ color: 'rgba(245,240,232,.55)' }}>
                           {email}
                         </div>
                       </div>
                     </div>
                     {empresa && (
-                      <div className="mt-3 text-[11px] font-mono px-3 py-1.5 rounded inline-block" style={{ background: '#242424', color: '#7a756e', border: '1px solid #2a2a2a' }}>
+                      <div className="mt-3 text-[11px] font-mono px-3 py-1.5 rounded inline-block" style={{ background: 'rgba(30,24,19,.7)', color: 'rgba(245,240,232,.55)', border: '1px solid rgba(200,161,90,.2)' }}>
                         {empresa}
                       </div>
                     )}
@@ -122,7 +122,7 @@ export function Header() {
                         className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded"
                         style={{
                           background: plan === 'active' ? 'rgba(212,165,116,0.15)' : 'rgba(122,117,110,0.15)',
-                          color: plan === 'active' ? '#d4a574' : '#7a756e',
+                          color: plan === 'active' ? '#c8a15a' : 'rgba(245,240,232,.55)',
                         }}
                       >
                         {planLabel}
@@ -135,11 +135,11 @@ export function Header() {
                     <button
                       onClick={() => { setMenuOpen(false); setSupportOpen(true); }}
                       className="w-full flex items-center gap-3 px-4 py-3 text-sm text-left transition-colors duration-150"
-                      style={{ color: '#f5f0eb' }}
-                      onMouseEnter={(e) => e.currentTarget.style.background = '#242424'}
+                      style={{ color: '#f5f0e8' }}
+                      onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(30,24,19,.7)'}
                       onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                     >
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7a756e" strokeWidth="1.5">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(245,240,232,.55)" strokeWidth="1.5">
                         <circle cx="12" cy="12" r="10" />
                         <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
                         <line x1="12" y1="17" x2="12.01" y2="17" />
@@ -150,11 +150,11 @@ export function Header() {
                     <button
                       onClick={handleSignOut}
                       className="w-full flex items-center gap-3 px-4 py-3 text-sm text-left transition-colors duration-150"
-                      style={{ color: '#ff4757' }}
-                      onMouseEnter={(e) => e.currentTarget.style.background = '#242424'}
+                      style={{ color: '#ef4444' }}
+                      onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(30,24,19,.7)'}
                       onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                     >
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff4757" strokeWidth="1.5">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="1.5">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                         <polyline points="16 17 21 12 16 7" />
                         <line x1="21" y1="12" x2="9" y2="12" />
@@ -167,7 +167,7 @@ export function Header() {
             </div>
           </div>
         </div>
-        <div className="h-px" style={{ background: '#2a2a2a' }} />
+        <div className="h-px" style={{ background: 'rgba(200,161,90,.2)' }} />
       </header>
 
       {/* Support Modal */}
@@ -179,50 +179,50 @@ export function Header() {
           <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.7)' }} />
           <div
             className="relative w-full max-w-md rounded-lg p-6"
-            style={{ background: '#1a1a1a', border: '1px solid #2a2a2a', animation: 'menuIn 0.2s ease' }}
+            style={{ background: '#0f0c0a', border: '1px solid rgba(200,161,90,.2)', animation: 'menuIn 0.2s ease' }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-5">
-              <h3 className="text-base font-bold" style={{ color: '#f5f0eb' }}>Soporte y ayuda</h3>
+              <h3 className="text-base font-bold" style={{ color: '#f5f0e8' }}>Soporte y ayuda</h3>
               <button
                 onClick={() => setSupportOpen(false)}
                 className="w-7 h-7 rounded-full flex items-center justify-center transition-colors"
-                style={{ background: '#242424', color: '#7a756e' }}
+                style={{ background: 'rgba(30,24,19,.7)', color: 'rgba(245,240,232,.55)' }}
               >
                 ✕
               </button>
             </div>
 
             <div className="space-y-4">
-              <div className="p-4 rounded-lg" style={{ background: '#242424', border: '1px solid #2a2a2a' }}>
-                <div className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: '#d4a574' }}>
+              <div className="p-4 rounded-lg" style={{ background: 'rgba(30,24,19,.7)', border: '1px solid rgba(200,161,90,.2)' }}>
+                <div className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: '#c8a15a' }}>
                   Correo de soporte
                 </div>
-                <a href="mailto:contacto@vcfo.ai" className="text-sm font-mono transition-colors" style={{ color: '#f5f0eb' }}>
+                <a href="mailto:contacto@vcfo.ai" className="text-sm font-mono transition-colors" style={{ color: '#f5f0e8' }}>
                   contacto@vcfo.ai
                 </a>
               </div>
 
-              <div className="p-4 rounded-lg" style={{ background: '#242424', border: '1px solid #2a2a2a' }}>
-                <div className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: '#d4a574' }}>
+              <div className="p-4 rounded-lg" style={{ background: 'rgba(30,24,19,.7)', border: '1px solid rgba(200,161,90,.2)' }}>
+                <div className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: '#c8a15a' }}>
                   WhatsApp
                 </div>
-                <a href="https://wa.me/51999999999" className="text-sm font-mono transition-colors" style={{ color: '#f5f0eb' }}>
+                <a href="https://wa.me/51999999999" className="text-sm font-mono transition-colors" style={{ color: '#f5f0e8' }}>
                   +51 999 999 999
                 </a>
               </div>
 
-              <div className="p-4 rounded-lg" style={{ background: '#242424', border: '1px solid #2a2a2a' }}>
-                <div className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: '#d4a574' }}>
+              <div className="p-4 rounded-lg" style={{ background: 'rgba(30,24,19,.7)', border: '1px solid rgba(200,161,90,.2)' }}>
+                <div className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: '#c8a15a' }}>
                   Horario de atención
                 </div>
-                <p className="text-sm" style={{ color: '#7a756e' }}>
+                <p className="text-sm" style={{ color: 'rgba(245,240,232,.55)' }}>
                   Lunes a Viernes, 9:00 AM — 6:00 PM (hora Perú)
                 </p>
               </div>
             </div>
 
-            <p className="mt-5 text-xs text-center" style={{ color: '#3a3a3a' }}>
+            <p className="mt-5 text-xs text-center" style={{ color: 'rgba(200,161,90,.3)' }}>
               Capital CFO
             </p>
           </div>

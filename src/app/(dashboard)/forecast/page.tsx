@@ -267,7 +267,7 @@ export default function ForecastPage() {
                 value={growthRate}
                 onChange={(e) => handleGrowthChange(Number(e.target.value))}
                 className="w-full h-2 rounded-full bg-border appearance-none cursor-pointer"
-                style={{ accentColor: '#45ffbc' }}
+                style={{ accentColor: '#c8a15a' }}
               />
               <div className="flex justify-between">
                 <span className="font-mono text-[11px] text-darker">3%</span>

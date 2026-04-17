@@ -58,8 +58,8 @@ export function LineChart({ data, data2, compact = false }: LineChartProps) {
     >
       <defs>
         <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#45ffbc" stopOpacity="0.15" />
-          <stop offset="100%" stopColor="#45ffbc" stopOpacity="0" />
+          <stop offset="0%" stopColor="#c8a15a" stopOpacity="0.15" />
+          <stop offset="100%" stopColor="#c8a15a" stopOpacity="0" />
         </linearGradient>
       </defs>
 
@@ -71,7 +71,7 @@ export function LineChart({ data, data2, compact = false }: LineChartProps) {
           y1={chartH - chartH * pct}
           x2={100 - pad}
           y2={chartH - chartH * pct}
-          stroke="#1a1a1a"
+          stroke="rgba(200,161,90,.1)"
           strokeWidth={0.3}
         />
       ))}
@@ -83,7 +83,7 @@ export function LineChart({ data, data2, compact = false }: LineChartProps) {
       <polyline
         points={polyline(data)}
         fill="none"
-        stroke="#45ffbc"
+        stroke="#c8a15a"
         strokeWidth={0.8}
         strokeLinejoin="round"
         strokeLinecap="round"
@@ -92,7 +92,7 @@ export function LineChart({ data, data2, compact = false }: LineChartProps) {
         const { x, y } = pt(i, d.value, data.length);
         return (
           <g key={`p-${i}`}>
-            <circle cx={x} cy={y} r={1.2} fill="#45ffbc" />
+            <circle cx={x} cy={y} r={1.2} fill="#c8a15a" />
             {/* Hover hitbox */}
             <circle cx={x} cy={y} r={3} fill="transparent" className="cursor-pointer" />
           </g>
@@ -105,14 +105,14 @@ export function LineChart({ data, data2, compact = false }: LineChartProps) {
           <polyline
             points={polyline(data2)}
             fill="none"
-            stroke="#f5a623"
+            stroke="#d9925a"
             strokeWidth={0.6}
             strokeDasharray="2,1.5"
             strokeLinejoin="round"
           />
           {data2.map((d, i) => {
             const { x, y } = pt(i, d.value, data2.length);
-            return <circle key={`s-${i}`} cx={x} cy={y} r={1} fill="#f5a623" />;
+            return <circle key={`s-${i}`} cx={x} cy={y} r={1} fill="#d9925a" />;
           })}
         </>
       )}
@@ -126,7 +126,7 @@ export function LineChart({ data, data2, compact = false }: LineChartProps) {
             x={x}
             y={vbH - 1}
             textAnchor="middle"
-            fill="#969593"
+            fill="rgba(245,240,232,.5)"
             fontSize={2.5}
             fontFamily="JetBrains Mono, monospace"
           >

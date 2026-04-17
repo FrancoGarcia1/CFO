@@ -5,46 +5,58 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: '#000000',
+        // ═══ Hybrid palette: gold + liquid glass ═══
+        background: '#0a0808',
         surface: {
-          DEFAULT: '#1a1a1a',
-          2: '#2e2e2e',
-          3: '#313131',
+          DEFAULT: 'rgba(22, 18, 15, 0.6)',
+          2: 'rgba(30, 24, 19, 0.7)',
+          3: 'rgba(38, 30, 24, 0.8)',
         },
         card: {
-          DEFAULT: '#1a1a1a',
-          hover: '#242424',
+          DEFAULT: 'rgba(22, 18, 15, 0.6)',
+          hover: 'rgba(30, 24, 19, 0.75)',
         },
         border: {
-          DEFAULT: '#313131',
-          hover: '#4a4a4a',
-          active: '#45ffbc',
+          DEFAULT: 'rgba(200, 161, 90, 0.15)',
+          hover: 'rgba(200, 161, 90, 0.3)',
+          active: '#c8a15a',
         },
-        input: '#1a1a1a',
+        input: 'rgba(22, 18, 15, 0.6)',
+        // Primary = positivo (verde oliva suave, ya no mint)
         primary: {
-          DEFAULT: '#45ffbc',
-          foreground: '#000000',
-          dim: 'rgba(69, 255, 188, 0.12)',
+          DEFAULT: '#a8c47a',
+          foreground: '#0a0a0a',
+          dim: 'rgba(168, 196, 122, 0.12)',
+        },
+        // Gold accent (nuevo — brand principal)
+        gold: {
+          DEFAULT: '#c8a15a',
+          light: '#d4b577',
+          deep: '#b08c47',
+          foil: '#e6c88a',
+          soft: 'rgba(200, 161, 90, 0.08)',
+          halo: 'rgba(200, 161, 90, 0.4)',
+          foreground: '#0a0a0a',
         },
         danger: {
-          DEFAULT: '#ff4757',
+          DEFAULT: '#ef4444',
           foreground: '#ffffff',
-          dim: 'rgba(255, 71, 87, 0.12)',
+          dim: 'rgba(239, 68, 68, 0.12)',
         },
         warning: {
-          DEFAULT: '#f5a623',
-          foreground: '#000000',
-          dim: 'rgba(245, 166, 35, 0.12)',
+          DEFAULT: '#d9925a',
+          foreground: '#0a0a0a',
+          dim: 'rgba(217, 146, 90, 0.12)',
         },
         accent: {
-          DEFAULT: '#e3ffa8',
-          dim: 'rgba(227, 255, 168, 0.12)',
+          DEFAULT: '#c8a15a',
+          dim: 'rgba(200, 161, 90, 0.12)',
         },
-        'brand-red': '#dc2626',
-        foreground: '#ffffff',
-        'muted-foreground': '#969593',
-        dim: '#969593',
-        darker: '#6b6b6b',
+        'brand-red': '#ef4444',
+        foreground: '#f5f0e8',
+        'muted-foreground': 'rgba(245, 240, 232, 0.6)',
+        dim: 'rgba(245, 240, 232, 0.5)',
+        darker: 'rgba(245, 240, 232, 0.35)',
       },
       fontFamily: {
         sans: ['Be Vietnam Pro', 'system-ui', 'sans-serif'],

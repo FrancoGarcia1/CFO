@@ -6,9 +6,9 @@ interface ScoreRingProps {
 }
 
 function getScoreColor(score: number): string {
-  if (score >= 70) return '#45ffbc';
-  if (score >= 45) return '#f5a623';
-  return '#ff4757';
+  if (score >= 70) return '#a8c47a';  // verde oliva suave
+  if (score >= 45) return '#d9925a';  // terracota
+  return '#ef4444';                    // crítico
 }
 
 function getScoreLabel(score: number): string {
@@ -37,7 +37,7 @@ export function ScoreRing({ score, size = 'md' }: ScoreRingProps) {
           cy={center}
           r={r}
           fill="none"
-          stroke="#1a1a1a"
+          stroke="rgba(200,161,90,.15)"
           strokeWidth={isSm ? 4 : 5}
         />
         <circle

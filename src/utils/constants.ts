@@ -63,10 +63,11 @@ export const CURRENCIES = {
 export type CurrencyCode = keyof typeof CURRENCIES;
 
 export const COLORS = {
-  positive: '#00e5a0',
-  negative: '#ff4757',
-  warning: '#f5a623',
-  neutral: '#8892b0',
+  positive: '#a8c47a',  // verde oliva suave
+  negative: '#d9925a',  // terracota
+  warning: '#d9925a',
+  neutral: '#6b6660',
+  accent: '#c8a15a',    // gold brand
 } as const;
 
 export const TYPE_LABELS: Record<TransactionType, string> = {

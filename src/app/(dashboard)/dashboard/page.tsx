@@ -137,11 +137,11 @@ export default function DashboardPage() {
       {/* ═══ Secondary KPIs — scrollable on mobile ═══ */}
       <div className="flex gap-2 overflow-x-auto pb-1 sm:grid sm:grid-cols-5 sm:overflow-visible" style={{ scrollbarWidth: 'none' }}>
         {[
-          { label: 'P. EQUILIBRIO', value: fmt(kpis.pe), color: '#f5a623' },
-          { label: 'TRANSACC.', value: fmtN(kpis.countIncome), color: '#969593' },
-          { label: 'TICKET', value: fmt(kpis.avgTicket), color: '#969593' },
-          { label: 'VISITANTES', value: avgVisitors > 0 ? fmtN(avgVisitors) : '—', color: '#969593' },
-          { label: 'OCUPACIÓN', value: avgOccupancy > 0 ? `${avgOccupancy.toFixed(1)}%` : '—', color: '#969593' },
+          { label: 'P. EQUILIBRIO', value: fmt(kpis.pe), color: '#d9925a' },
+          { label: 'TRANSACC.', value: fmtN(kpis.countIncome), color: 'rgba(245,240,232,.45)' },
+          { label: 'TICKET', value: fmt(kpis.avgTicket), color: 'rgba(245,240,232,.45)' },
+          { label: 'VISITANTES', value: avgVisitors > 0 ? fmtN(avgVisitors) : '—', color: 'rgba(245,240,232,.45)' },
+          { label: 'OCUPACIÓN', value: avgOccupancy > 0 ? `${avgOccupancy.toFixed(1)}%` : '—', color: 'rgba(245,240,232,.45)' },
         ].map((kpi) => (
           <div
             key={kpi.label}

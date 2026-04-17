@@ -64,7 +64,7 @@ export function PeriodSelector({
                 className={cn(
                   'px-2 py-1 text-xs transition-colors',
                   viewPeriod === p.value
-                    ? 'font-medium text-primary'
+                    ? 'font-medium text-accent'
                     : 'text-muted-foreground hover:text-foreground',
                 )}
               >
@@ -85,7 +85,7 @@ export function PeriodSelector({
               onClick={() => onYearChange(year)}
               className={cn(
                 'px-1.5 py-1 text-xs font-mono transition-colors',
-                viewYear === year ? 'font-medium text-primary' : 'text-darker hover:text-foreground',
+                viewYear === year ? 'font-medium text-accent' : 'text-darker hover:text-foreground',
               )}
             >
               {year}
@@ -104,7 +104,7 @@ export function PeriodSelector({
                   onClick={() => onMonthChange(i)}
                   className={cn(
                     'px-1 py-1 text-[11px] font-mono transition-colors',
-                    viewMonth === i ? 'font-medium text-primary' : 'text-darker hover:text-foreground',
+                    viewMonth === i ? 'font-medium text-accent' : 'text-darker hover:text-foreground',
                   )}
                 >
                   {month}
@@ -115,7 +115,7 @@ export function PeriodSelector({
         )}
 
         {/* Label */}
-        <div className="ml-auto text-xs font-medium text-primary font-mono">
+        <div className="ml-auto text-xs font-medium text-accent font-mono">
           {label}
         </div>
       </div>
@@ -133,7 +133,7 @@ export function PeriodSelector({
               <line x1="8" y1="2" x2="8" y2="6" />
               <line x1="3" y1="10" x2="21" y2="10" />
             </svg>
-            <span className="text-xs font-medium text-primary font-mono">{label}</span>
+            <span className="text-xs font-medium text-accent font-mono">{label}</span>
           </div>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-muted-foreground">
             <polyline points="6 9 12 15 18 9" />
@@ -169,7 +169,7 @@ export function PeriodSelector({
                     className={cn(
                       'py-2.5 rounded-lg text-xs font-medium transition-all',
                       viewPeriod === p.value
-                        ? 'bg-primary text-black'
+                        ? 'bg-accent text-black'
                         : 'bg-surface-2 text-muted-foreground',
                     )}
                   >
@@ -190,7 +190,7 @@ export function PeriodSelector({
                     className={cn(
                       'py-2.5 rounded-lg text-xs font-mono font-medium transition-all',
                       viewYear === year
-                        ? 'bg-primary text-black'
+                        ? 'bg-accent text-black'
                         : 'bg-surface-2 text-muted-foreground',
                     )}
                   >
@@ -212,7 +212,7 @@ export function PeriodSelector({
                       className={cn(
                         'py-2.5 rounded-lg text-xs font-mono font-medium transition-all',
                         viewMonth === i
-                          ? 'bg-primary text-black'
+                          ? 'bg-accent text-black'
                           : 'bg-surface-2 text-muted-foreground',
                       )}
                     >
@@ -240,9 +240,9 @@ export function PeriodSelector({
                         className={cn(
                           'py-2 rounded-lg text-xs font-mono font-medium transition-all',
                           selectedDay === day
-                            ? 'bg-primary text-black'
+                            ? 'bg-accent text-black'
                             : isToday
-                              ? 'bg-primary/20 text-primary'
+                              ? 'bg-accent/20 text-accent'
                               : 'bg-surface-2 text-muted-foreground',
                         )}
                       >
@@ -257,7 +257,7 @@ export function PeriodSelector({
             {/* Apply button */}
             <button
               onClick={() => setMobileOpen(false)}
-              className="w-full py-3 rounded-lg bg-primary text-black font-semibold text-sm transition-colors hover:brightness-90"
+              className="w-full py-3 rounded-lg bg-accent text-black font-semibold text-sm transition-colors hover:brightness-90"
             >
               Aplicar — {label}
             </button>

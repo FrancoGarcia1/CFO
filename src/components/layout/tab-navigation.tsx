@@ -62,13 +62,14 @@ export function TabNavigation() {
               className={cn(
                 'relative whitespace-nowrap py-2.5 sm:py-3 px-2 sm:px-1 text-[11px] sm:text-xs transition-colors',
                 isActive
-                  ? 'font-medium text-primary'
+                  ? 'font-medium'
                   : 'text-muted-foreground hover:text-foreground',
               )}
+              style={isActive ? { color: '#c8a15a' } : undefined}
             >
               {tab.label}
               {isActive && (
-                <span className="absolute bottom-0 left-0 h-0.5 w-full bg-primary" />
+                <span className="absolute bottom-0 left-0 h-0.5 w-full" style={{ background: '#c8a15a' }} />
               )}
             </Link>
           );

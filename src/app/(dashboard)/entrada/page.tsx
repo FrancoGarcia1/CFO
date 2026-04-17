@@ -493,7 +493,7 @@ export default function EntradaPage() {
                       <td
                         className="py-3 px-4 text-right font-mono text-xs font-bold"
                         style={{
-                          color: t.type === 'income' ? '#45ffbc' : '#ff4757',
+                          color: t.type === 'income' ? '#a8c47a' : '#ef4444',
                         }}
                       >
                         {t.type === 'income' ? '+' : '-'}{fmt(t.amount)}
