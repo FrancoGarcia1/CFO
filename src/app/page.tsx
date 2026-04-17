@@ -35,7 +35,7 @@ const CLIENT_LOGOS = [
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen overflow-hidden text-white" style={{ background: '#0a0a0a', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+    <div className="min-h-screen text-white" style={{ background: '#0a0a0a', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
         :root{
