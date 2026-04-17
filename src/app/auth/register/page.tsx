@@ -36,26 +36,46 @@ export default function RegisterPage() {
 
     setLoading(true);
 
-    const supabase = createClient();
-    const { error: signUpError } = await supabase.auth.signUp({
-      email: form.email,
-      password: form.password,
-      options: {
-        data: {
+    // Step 1: Create user via admin API (auto-confirms email, no SMTP needed)
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password,
           nombre: form.nombre,
           telefono: form.telefono,
           empresa: form.empresa,
-        },
-      },
-    });
+        }),
+      });
 
-    if (signUpError) {
-      setError(signUpError.message);
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || 'Error al crear cuenta');
+        setLoading(false);
+        return;
+      }
+
+      // Step 2: Sign in the newly created user
+      const supabase = createClient();
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: form.email,
+        password: form.password,
+      });
+
+      if (signInError) {
+        setError('Cuenta creada. Por favor inicia sesión.');
+        setLoading(false);
+        return;
+      }
+
+      router.push('/dashboard');
+    } catch {
+      setError('Error de conexión. Intenta de nuevo.');
       setLoading(false);
-      return;
     }
-
-    router.push('/dashboard');
   };
 
   return (
