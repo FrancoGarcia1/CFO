@@ -3,10 +3,10 @@ import { CATS } from '@/utils/constants';
 
 /**
  * RFC 4180-compliant CSV parser.
- * Handles quoted fields with embedded commas, newlines, and escaped quotes.
- * The original prototype used `line.split(",")` which breaks on quoted commas.
+ * Handles quoted fields with embedded delimiters, newlines, and escaped quotes.
+ * Supports both `,` and `;` as delimiters (auto-detected per line or passed in).
  */
-export function parseCSVLine(line: string): string[] {
+export function parseCSVLine(line: string, delimiter: ',' | ';' = ','): string[] {
   const fields: string[] = [];
   let current = '';
   let inQuotes = false;
@@ -17,12 +17,10 @@ export function parseCSVLine(line: string): string[] {
 
     if (inQuotes) {
       if (ch === '"') {
-        // Check for escaped quote ("")
         if (i + 1 < line.length && line[i + 1] === '"') {
           current += '"';
           i += 2;
         } else {
-          // End of quoted field
           inQuotes = false;
           i++;
         }
@@ -34,7 +32,7 @@ export function parseCSVLine(line: string): string[] {
       if (ch === '"') {
         inQuotes = true;
         i++;
-      } else if (ch === ',') {
+      } else if (ch === delimiter) {
         fields.push(current.trim());
         current = '';
         i++;
@@ -45,10 +43,24 @@ export function parseCSVLine(line: string): string[] {
     }
   }
 
-  // Push last field
   fields.push(current.trim());
-
   return fields;
+}
+
+/** Detect the most likely delimiter in a CSV text (; vs ,). */
+function detectDelimiter(text: string): ',' | ';' {
+  // First line might be "sep=;" hint — check it
+  const firstLine = text.split('\n')[0]?.trim();
+  if (firstLine?.startsWith('sep=')) {
+    const sep = firstLine.slice(4);
+    if (sep === ';') return ';';
+    if (sep === ',') return ',';
+  }
+  // Count delimiters in the first real line
+  const sample = text.split('\n').slice(0, 5).join('\n');
+  const semicolons = (sample.match(/;/g) || []).length;
+  const commas = (sample.match(/,/g) || []).length;
+  return semicolons > commas ? ';' : ',';
 }
 
 /**
@@ -57,20 +69,27 @@ export function parseCSVLine(line: string): string[] {
  */
 export function parseCSV(text: string): string[][] {
   const rows: string[][] = [];
-  const lines = text.trim().replace(/\r\n/g, '\n').split('\n');
+  let clean = text.trim().replace(/\r\n/g, '\n');
+
+  // Strip "sep=;" Excel hint line if present
+  if (clean.startsWith('sep=')) {
+    const newlineIdx = clean.indexOf('\n');
+    if (newlineIdx !== -1) clean = clean.slice(newlineIdx + 1);
+  }
+
+  const delimiter = detectDelimiter(clean);
+  const lines = clean.split('\n');
 
   let pendingLine = '';
   let inQuotes = false;
 
   for (const rawLine of lines) {
     if (inQuotes) {
-      // Continue accumulating a multi-line quoted field
       pendingLine += '\n' + rawLine;
     } else {
       pendingLine = rawLine;
     }
 
-    // Count unescaped quotes to determine if we're inside a quoted field
     let quoteCount = 0;
     for (let i = 0; i < pendingLine.length; i++) {
       if (pendingLine[i] === '"') quoteCount++;
@@ -78,14 +97,13 @@ export function parseCSV(text: string): string[][] {
     inQuotes = quoteCount % 2 !== 0;
 
     if (!inQuotes) {
-      rows.push(parseCSVLine(pendingLine));
+      rows.push(parseCSVLine(pendingLine, delimiter));
       pendingLine = '';
     }
   }
 
-  // If there's leftover (unclosed quote), parse what we have
   if (pendingLine) {
-    rows.push(parseCSVLine(pendingLine));
+    rows.push(parseCSVLine(pendingLine, delimiter));
   }
 
   return rows;

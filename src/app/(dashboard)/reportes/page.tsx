@@ -11,7 +11,7 @@ import { useKpis } from '@/hooks/use-kpis';
 import { useForecast } from '@/hooks/use-forecast';
 import { useAuth } from '@/providers/auth-provider';
 import { useCurrency } from '@/hooks/use-currency';
-import { exportCSV, exportPnLCSV } from '@/utils/csv-export';
+import { exportCSV, exportPnLCSV, exportPnLGerencialCSV } from '@/utils/csv-export';
 import { generatePDFReport } from '@/utils/pdf-export';
 import { MONTHS } from '@/utils/constants';
 import { fmt } from '@/utils/formatters';
@@ -28,10 +28,17 @@ interface ExportCard {
 
 function buildCSVAndDownload(rows: (string | number)[][], filename: string) {
   const bom = '\ufeff';
-  const csv = rows
-    .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(','))
+  const DELIM = ';';
+  const hint = `sep=${DELIM}\n`;
+  const body = rows
+    .map((r) => r.map((c) => {
+      const s = String(c);
+      return s.includes(DELIM) || s.includes('"') || s.includes('\n')
+        ? `"${s.replace(/"/g, '""')}"`
+        : s;
+    }).join(DELIM))
     .join('\n');
-  const blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8;' });
+  const blob = new Blob([bom + hint + body], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -102,10 +109,22 @@ export default function ReportesPage() {
   const exportCards: ExportCard[] = [
     {
       icon: '\uD83D\uDCCA',
-      title: 'P&L Completo',
-      description: 'Estado de resultados con todos los indicadores financieros clave.',
+      title: 'P&L Gerencial Anual',
+      description: 'Informe mensual con Ene-Dic, totales y márgenes por categoría.',
+      action: () => exportPnLGerencialCSV({
+        transactions,
+        year: viewYear,
+        empresa: profile?.empresa ?? 'MI EMPRESA',
+      }),
+      buttonLabel: 'Exportar P&L Anual',
+      isPrimary: true,
+    },
+    {
+      icon: '\uD83D\uDCC8',
+      title: 'P&L Resumen',
+      description: 'Estado de resultados del período con indicadores clave.',
       action: () => exportPnLCSV(kpis),
-      buttonLabel: 'Exportar P&L',
+      buttonLabel: 'Exportar resumen',
     },
     {
       icon: '\uD83D\uDCCB',
@@ -115,7 +134,7 @@ export default function ReportesPage() {
       buttonLabel: 'Exportar transacciones',
     },
     {
-      icon: '\uD83D\uDCC8',
+      icon: '\uD83D\uDCC9',
       title: 'Forecast vs Real',
       description: 'Comparativo mensual entre proyecciones y datos reales.',
       action: handleExportForecast,
@@ -134,7 +153,6 @@ export default function ReportesPage() {
           currency,
         }),
       buttonLabel: 'Generar PDF',
-      isPrimary: true,
     },
   ];
 
