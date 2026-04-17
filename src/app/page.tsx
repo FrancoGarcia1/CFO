@@ -1,278 +1,358 @@
 import Link from 'next/link';
-import Image from 'next/image';
-import { TextScramble, AnimatedCounter, MagneticButton, MorphingBlob, SpotlightHero } from '@/components/landing/wow-effects';
+import { MagneticButton, SpotlightHero } from '@/components/landing/wow-effects';
 
-const FEATURES = [
-  { n: '01', title: 'Dashboard financiero', desc: 'Health Score, KPIs, márgenes, EBITDA y punto de equilibrio actualizados al instante.' },
-  { n: '02', title: 'Forecast inteligente', desc: 'Proyecciones con ajuste trimestral automático basado en tu desempeño real.' },
-  { n: '03', title: 'Simulador P&L', desc: 'Cambia variables y ve el impacto inmediato en tu estado de resultados.' },
-  { n: '04', title: 'Consultor estratégico', desc: 'Hazle cualquier pregunta. Responde con tus datos financieros reales.' },
+const NAV_LINKS = [
+  { href: '#servicios', label: 'Servicios' },
+  { href: '#casos', label: 'Casos de éxito' },
+  { href: '#equipo', label: 'Equipo' },
+  { href: '#precios', label: 'Precios' },
 ];
 
-const TICKER_TEXT = 'DASHBOARD · FORECAST · SIMULADOR · CONSULTOR · REPORTES · EBITDA · HEALTH SCORE · P&L · ';
+const TEAM_INITIALS = [
+  { initials: 'MR', color: '#ef4444' },
+  { initials: 'CL', color: '#06b6d4' },
+  { initials: 'PA', color: '#8b5cf6' },
+  { initials: 'SV', color: '#10b981' },
+  { initials: 'JT', color: '#eab308' },
+];
+
+const STATS = [
+  { value: '26.4%', label: 'EBITDA prom.' },
+  { value: '24/7', label: 'Disponible' },
+  { value: '<2min', label: 'Diagnóstico' },
+  { value: '+85', label: 'Empresas' },
+];
+
+const CLIENT_LOGOS = [
+  'CONFÍAN EN NOSOTROS',
+  'INVERSIONES PACÍFICO',
+  'GRUPONOVA',
+  'ANDEAN CAPITAL',
+  'RETAILPRO',
+  'TECHMASS',
+];
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen overflow-hidden text-[#f5f0eb]">
+    <div className="min-h-screen overflow-hidden text-white" style={{ background: '#0a0a0a', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
         :root{
-          --bg:#0f0f0f;
-          --bg2:#1a1a1a;
-          --bg3:#242424;
-          --ivory:#f5f0eb;
-          --cream:#e8e4df;
-          --copper:#d4a574;
-          --copper-light:#e8c9a8;
-          --dim:#7a756e;
-          --border:#2a2a2a;
+          --bg:#0a0a0a;
+          --bg-card:#141414;
+          --border:#1f1f1f;
+          --gold:#c8a15a;
+          --gold-light:#d4b577;
+          --gold-dark:#a88348;
+          --ivory:#f5f0e8;
+          --dim:#6b6660;
+          --muted:#9a9490;
         }
-        .lp{font-family:'Plus Jakarta Sans',sans-serif}
 
-        /* Grain */
-        .grain::after{content:'';position:fixed;inset:0;z-index:200;pointer-events:none;opacity:.025;
-          background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+        /* Logo icon square */
+        .logo-icon{
+          width:28px;height:28px;border-radius:6px;
+          background:linear-gradient(135deg,#c8a15a,#a88348);
+          display:flex;align-items:center;justify-content:center;
+        }
 
-        /* Marquee */
-        .ticker{overflow:hidden;white-space:nowrap}
-        .ticker-track{display:inline-block;animation:marquee 30s linear infinite}
-        @keyframes marquee{to{transform:translateX(-50%)}}
-
-        /* Entries */
-        .e1{animation:rise .6s cubic-bezier(.22,1,.36,1) .05s forwards;opacity:0}
-        .e2{animation:rise .6s cubic-bezier(.22,1,.36,1) .12s forwards;opacity:0}
-        .e3{animation:rise .6s cubic-bezier(.22,1,.36,1) .22s forwards;opacity:0}
-        .e4{animation:rise .6s cubic-bezier(.22,1,.36,1) .35s forwards;opacity:0}
-        .e5{animation:rise .7s cubic-bezier(.22,1,.36,1) .25s forwards;opacity:0}
+        /* Entry animations */
+        .e1{animation:rise .7s cubic-bezier(.22,1,.36,1) .05s forwards;opacity:0}
+        .e2{animation:rise .7s cubic-bezier(.22,1,.36,1) .15s forwards;opacity:0}
+        .e3{animation:rise .7s cubic-bezier(.22,1,.36,1) .25s forwards;opacity:0}
+        .e4{animation:rise .7s cubic-bezier(.22,1,.36,1) .35s forwards;opacity:0}
+        .e5{animation:rise .8s cubic-bezier(.22,1,.36,1) .3s forwards;opacity:0}
+        .e6{animation:rise .7s cubic-bezier(.22,1,.36,1) .5s forwards;opacity:0}
         @keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-        /* Photo reveal */
-        .img-reveal{animation:unveil .8s cubic-bezier(.22,1,.36,1) .15s forwards;clip-path:inset(100% 0 0 0)}
-        @keyframes unveil{to{clip-path:inset(0 0 0 0)}}
+        .cta-gold{
+          background:linear-gradient(135deg,#c8a15a,#a88348);
+          color:#0a0a0a;font-weight:600;
+          transition:all .25s;
+        }
+        .cta-gold:hover{
+          background:linear-gradient(135deg,#d4b577,#c8a15a);
+          box-shadow:0 0 30px rgba(200,161,90,.25);
+        }
 
-        /* Feature row */
-        .feat-row{border-bottom:1px solid var(--border);transition:all .25s ease}
-        .feat-row:first-child{border-top:1px solid var(--border)}
-        .feat-row:hover{background:var(--bg2);padding-left:1rem}
-        .feat-row:hover .feat-idx{color:var(--copper)}
-        .feat-row:hover .feat-title{color:var(--copper-light)}
-        .feat-idx{color:var(--border);transition:color .25s}
+        .nav-link{
+          color:rgba(255,255,255,.65);
+          transition:color .2s;
+        }
+        .nav-link:hover{color:#c8a15a}
 
-        /* CTA */
-        .cta-solid{background:var(--copper);color:var(--bg);font-weight:700;transition:all .2s}
-        .cta-solid:hover{background:var(--ivory);color:var(--bg)}
-        .cta-outline{border:1px solid var(--copper);color:var(--copper);transition:all .2s}
-        .cta-outline:hover{background:var(--copper);color:var(--bg)}
+        /* Bar animation */
+        @keyframes barGrow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+        .bar{transform-origin:bottom;animation:barGrow .8s ease .8s forwards;transform:scaleY(0)}
+
+        /* Grain */
+        .grain::before{
+          content:'';position:fixed;inset:0;z-index:100;pointer-events:none;opacity:.02;
+          background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
       `}</style>
 
-      <div className="grain lp" style={{ background: 'var(--bg)' }}>
+      <div className="grain">
 
         {/* ═══ NAV ═══ */}
-        <nav className="relative z-10 flex items-center justify-between px-5 py-5 md:px-10 lg:px-16" style={{ borderBottom: '1px solid var(--border)' }}>
-          <span className="text-sm font-bold tracking-tight" style={{ color: 'var(--ivory)' }}>
-            Capital CFO
-          </span>
-          <div className="flex items-center gap-5">
-            <Link href="/auth/login" className="hidden sm:inline text-xs uppercase tracking-widest transition-colors" style={{ color: 'var(--dim)' }}>
-              Ingresar
-            </Link>
-            <Link href="/auth/register" className="cta-solid px-5 py-2.5 text-xs uppercase tracking-widest">
-              Comenzar
-            </Link>
+        <nav className="relative z-20 flex items-center justify-between px-6 md:px-12 lg:px-20 py-5">
+          <Link href="/" className="flex items-center gap-2.5">
+            <div className="logo-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="3 17 9 11 13 15 21 7" />
+                <polyline points="14 7 21 7 21 14" />
+              </svg>
+            </div>
+            <span className="text-[15px] font-bold tracking-tight">
+              Capital<span style={{ color: 'var(--gold)' }}>CFO</span>
+            </span>
+          </Link>
+
+          <div className="hidden md:flex items-center gap-8">
+            {NAV_LINKS.map((l) => (
+              <a key={l.href} href={l.href} className="nav-link text-[13px] font-medium">
+                {l.label}
+              </a>
+            ))}
           </div>
+
+          <Link href="/auth/register" className="cta-gold rounded-md px-4 py-2 text-[12px] uppercase tracking-wider">
+            Diagnóstico gratuito
+          </Link>
         </nav>
 
         {/* ═══ HERO ═══ */}
-        <SpotlightHero className="px-5 md:px-10 lg:px-16">
+        <SpotlightHero className="px-6 md:px-12 lg:px-20">
           <div className="mx-auto max-w-[1400px]">
-            <div className="flex flex-col md:flex-row md:items-end gap-8 md:gap-0 pt-10 md:pt-20 pb-14 md:pb-0">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-10 lg:gap-16 pt-10 md:pt-16 pb-10 md:pb-20">
 
-              {/* Text */}
-              <div className="flex-1 md:pb-20 lg:pb-28">
-                <p className="e1 text-[10px] font-bold uppercase tracking-[4px] mb-6" style={{ color: 'var(--copper)' }}>
-                  Consultor Financiero
-                </p>
-
-                <h1 className="e2 text-[clamp(34px,7vw,78px)] font-extrabold leading-[0.95] tracking-tight mb-8">
-                  <TextScramble text="Tu CFO" delay={200} className="" /><br/>
-                  <span style={{ color: 'var(--copper)' }}><TextScramble text="senior." delay={600} /></span><br/>
-                  <span style={{ color: 'var(--dim)' }}><TextScramble text="Sin contratarlo." delay={1000} /></span>
-                </h1>
-
-                <p className="e3 max-w-lg text-sm md:text-base leading-relaxed mb-10" style={{ color: 'var(--dim)' }}>
-                  Registra, analiza y proyecta las finanzas de tu negocio con la
-                  guía de un director financiero con más de 8 años de experiencia.
-                  Disponible cuando lo necesites.
-                </p>
-
-                <div className="e4 flex flex-col sm:flex-row items-start gap-4">
-                  <MagneticButton href="/auth/register" className="cta-solid items-center gap-3 px-8 py-4 text-sm uppercase tracking-wider">
-                    Prueba gratuita
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                  </MagneticButton>
-                  <span className="text-[11px] pt-3" style={{ color: 'var(--dim)' }}>
-                    7 días gratis · Sin tarjeta
+              {/* LEFT: Text */}
+              <div>
+                {/* Badge */}
+                <div className="e1 mb-8 inline-flex items-center gap-2 rounded-full px-3.5 py-1.5" style={{ border: '1px solid rgba(200,161,90,.25)', background: 'rgba(200,161,90,.05)' }}>
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--gold)' }} />
+                  <span className="text-[10px] font-semibold uppercase tracking-[2.5px]" style={{ color: 'var(--gold)' }}>
+                    Consultoría Financiera
                   </span>
                 </div>
 
-                {/* Stats */}
-                <div className="e4 mt-12 flex items-center gap-8">
-                  <div>
-                    <AnimatedCounter value={50} suffix=".9%" className="text-xl md:text-2xl font-mono font-bold" style={{ color: 'var(--copper)' }} delay={300} />
-                    <div className="text-[9px] uppercase tracking-[1.5px] mt-1" style={{ color: 'var(--dim)' }}>EBITDA prom.</div>
-                  </div>
-                  <div>
-                    <div className="text-xl md:text-2xl font-mono font-bold" style={{ color: 'var(--copper)' }}>24/7</div>
-                    <div className="text-[9px] uppercase tracking-[1.5px] mt-1" style={{ color: 'var(--dim)' }}>Disponible</div>
-                  </div>
-                  <div>
-                    <div className="text-xl md:text-2xl font-mono font-bold" style={{ color: 'var(--copper)' }}>&lt;2min</div>
-                    <div className="text-[9px] uppercase tracking-[1.5px] mt-1" style={{ color: 'var(--dim)' }}>Diagnóstico</div>
-                  </div>
+                {/* Title */}
+                <h1 className="e2 text-[clamp(38px,5.5vw,64px)] font-extrabold leading-[1.05] tracking-tight mb-8">
+                  Tu área financiera,<br/>
+                  <span style={{ color: 'var(--gold)' }}>sin el costo</span><br/>
+                  de una contratación.
+                </h1>
+
+                {/* Description */}
+                <p className="e3 max-w-xl text-[15px] leading-relaxed mb-10" style={{ color: 'var(--muted)' }}>
+                  Registramos, analizamos y proyectamos las finanzas de tu negocio con un
+                  equipo especializado de directores financieros senior. Disponibles cuando
+                  lo necesites, sin estructura fija.
+                </p>
+
+                {/* CTAs */}
+                <div className="e4 flex items-center gap-5">
+                  <MagneticButton href="/auth/register" className="cta-gold items-center gap-2 rounded-md px-6 py-3 text-[13px] font-semibold">
+                    Diagnóstico gratuito
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  </MagneticButton>
+                  <Link href="#casos" className="text-[13px] transition-colors" style={{ color: 'var(--muted)' }}>
+                    Ver casos de éxito ›
+                  </Link>
                 </div>
               </div>
 
-              {/* Photo */}
-              <div className="e5 relative md:w-[320px] lg:w-[400px] md:-mb-1 flex-shrink-0">
-                <div className="absolute -inset-16 flex items-center justify-center pointer-events-none">
-                  <MorphingBlob color="#d4a574" size={500} />
+              {/* RIGHT: Two cards stacked */}
+              <div className="e5 space-y-4 lg:self-end">
+
+                {/* Card 1: Team */}
+                <div className="rounded-xl p-5" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
+                  <p className="text-[10px] font-semibold uppercase tracking-[2px] mb-3.5" style={{ color: 'var(--dim)' }}>
+                    Nuestro equipo
+                  </p>
+                  <div className="flex items-center -space-x-2 mb-3">
+                    {TEAM_INITIALS.map((t) => (
+                      <div
+                        key={t.initials}
+                        className="w-9 h-9 rounded-full flex items-center justify-center text-[10px] font-bold"
+                        style={{
+                          background: t.color,
+                          color: '#fff',
+                          border: '2px solid var(--bg-card)',
+                        }}
+                      >
+                        {t.initials}
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-[12.5px] leading-relaxed" style={{ color: 'var(--ivory)' }}>
+                    <span className="font-bold">+12 directores financieros</span>
+                    <span style={{ color: 'var(--muted)' }}> con experiencia en 6+ industrias</span>
+                  </p>
                 </div>
-                <div className="img-reveal relative aspect-[3/4] w-full overflow-hidden">
-                  <Image src="/franco.jpg" alt="Franco Garcia" fill className="object-cover object-top" priority />
-                  <div className="absolute inset-x-0 bottom-0 h-2/5" style={{ background: 'linear-gradient(to top, var(--bg), transparent)' }} />
-                </div>
-                <div className="absolute bottom-6 left-0 right-0 px-4">
-                  <div className="pl-4" style={{ borderLeft: '3px solid var(--copper)' }}>
-                    <div className="text-lg font-bold" style={{ color: 'var(--ivory)' }}>Capital CFO</div>
-                    <div className="text-[11px] font-mono" style={{ color: 'var(--dim)' }}>Asesoría Financiera</div>
+
+                {/* Card 2: EBITDA with mini chart */}
+                <div className="rounded-xl p-5" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
+                  <p className="text-[10px] font-semibold uppercase tracking-[2px] mb-2.5" style={{ color: 'var(--dim)' }}>
+                    EBITDA promedio clientes
+                  </p>
+                  <div className="flex items-end justify-between gap-3">
+                    <div>
+                      <div className="text-[28px] font-extrabold tracking-tight leading-none" style={{ color: 'var(--gold)' }}>
+                        26.4%
+                      </div>
+                      <p className="text-[11px] mt-2" style={{ color: 'var(--muted)' }}>
+                        <span style={{ color: 'var(--gold)' }}>↑</span> vs. línea base
+                      </p>
+                    </div>
+                    <div className="flex items-end gap-1 h-12">
+                      {[40, 55, 45, 70, 85, 95].map((h, i) => (
+                        <div
+                          key={i}
+                          className="bar w-2.5 rounded-sm"
+                          style={{
+                            height: `${h}%`,
+                            background: i >= 3 ? 'var(--gold)' : 'rgba(200,161,90,0.3)',
+                            animationDelay: `${0.8 + i * 0.08}s`,
+                          }}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+
+            {/* ═══ STATS ROW ═══ */}
+            <div className="e6 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-4 pb-10 md:pb-14">
+              {STATS.map((s) => (
+                <div key={s.label} className="text-center md:text-left">
+                  <div className="text-[28px] md:text-[32px] font-extrabold tracking-tight" style={{ color: 'var(--ivory)' }}>
+                    {s.value}
+                  </div>
+                  <div className="text-[10px] font-semibold uppercase tracking-[2px] mt-1" style={{ color: 'var(--dim)' }}>
+                    {s.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* ═══ CLIENTS ROW ═══ */}
+            <div className="pb-14 md:pb-20" style={{ borderTop: '1px solid var(--border)' }}>
+              <div className="flex flex-wrap items-center justify-around gap-x-8 gap-y-4 pt-6">
+                {CLIENT_LOGOS.map((l, i) => (
+                  <span
+                    key={l}
+                    className="text-[10px] font-semibold uppercase tracking-[2px]"
+                    style={{ color: i === 0 ? 'var(--gold)' : 'var(--dim)' }}
+                  >
+                    {l}
+                  </span>
+                ))}
+              </div>
+            </div>
+
           </div>
         </SpotlightHero>
 
-        {/* ═══ TICKER ═══ */}
-        <div className="py-3 overflow-hidden" style={{ background: 'var(--copper)', borderTop: '1px solid var(--copper-light)', borderBottom: '1px solid var(--copper-light)' }}>
-          <div className="ticker">
-            <div className="ticker-track font-bold text-[11px] tracking-[3px] uppercase" style={{ color: 'var(--bg)' }}>
-              {TICKER_TEXT.repeat(6)}
-            </div>
-          </div>
-        </div>
+        {/* ═══ SERVICIOS SECTION ═══ */}
+        <section id="servicios" className="px-6 md:px-12 lg:px-20 py-20 md:py-28" style={{ borderTop: '1px solid var(--border)' }}>
+          <div className="mx-auto max-w-[1400px]">
+            <p className="text-[10px] font-semibold uppercase tracking-[3px] mb-4" style={{ color: 'var(--gold)' }}>
+              Servicios
+            </p>
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-14 max-w-2xl">
+              Todo lo que tu área financiera necesita.{' '}
+              <span style={{ color: 'var(--muted)' }}>Automatizado.</span>
+            </h2>
 
-        {/* ═══ FEATURES ═══ */}
-        <section style={{ background: 'var(--bg2)' }}>
-          <div className="mx-auto max-w-[1400px] px-5 md:px-10 lg:px-16 py-20 md:py-28">
-            <div className="flex flex-col md:flex-row gap-12 md:gap-20">
-              <div className="md:w-[38%] md:sticky md:top-24 md:self-start">
-                <p className="text-[10px] font-bold uppercase tracking-[4px] mb-4" style={{ color: 'var(--copper)' }}>
-                  Plataforma
-                </p>
-                <h2 className="text-3xl md:text-4xl font-extrabold leading-tight tracking-tight" style={{ color: 'var(--ivory)' }}>
-                  Todo lo que un<br/>CFO hace.
-                </h2>
-                <p className="text-sm mt-4 leading-relaxed" style={{ color: 'var(--dim)' }}>
-                  Automatizado, disponible siempre, a una fracción del costo.
-                </p>
-              </div>
-              <div className="flex-1">
-                {FEATURES.map((f) => (
-                  <div key={f.n} className="feat-row group py-6 md:py-8 flex items-start gap-6 md:gap-8">
-                    <span className="feat-idx font-mono text-2xl font-bold flex-shrink-0">{f.n}</span>
-                    <div>
-                      <h3 className="feat-title text-base md:text-lg font-bold mb-1.5 transition-colors" style={{ color: 'var(--ivory)' }}>
-                        {f.title}
-                      </h3>
-                      <p className="text-xs md:text-sm leading-relaxed max-w-md" style={{ color: 'var(--dim)' }}>
-                        {f.desc}
-                      </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[
+                { n: '01', t: 'Dashboard financiero', d: 'Health Score, KPIs, márgenes, EBITDA y punto de equilibrio actualizados al instante.' },
+                { n: '02', t: 'Forecast inteligente', d: 'Proyecciones con ajuste trimestral automático basado en tu desempeño real.' },
+                { n: '03', t: 'Simulador P&L', d: 'Cambia variables y ve el impacto inmediato en tu estado de resultados.' },
+                { n: '04', t: 'Consultor estratégico', d: 'Hazle cualquier pregunta. Responde con tus datos financieros reales.' },
+                { n: '05', t: 'Reportes gerenciales', d: 'P&L anual, forecast vs real, exportes en Excel y PDF profesional.' },
+                { n: '06', t: 'Multi-moneda', d: 'Soporte para 18 monedas: LATAM, USD, EUR. Sin límites de expansión.' },
+              ].map((f) => (
+                <div
+                  key={f.n}
+                  className="p-6 rounded-xl transition-all duration-300 hover:-translate-y-0.5"
+                  style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="font-mono text-[18px] font-bold" style={{ color: 'var(--gold)' }}>
+                      {f.n}
+                    </span>
+                    <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: 'rgba(200,161,90,.1)' }}>
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: 'var(--gold)' }}>
+                        <line x1="7" y1="17" x2="17" y2="7"/>
+                        <polyline points="7 7 17 7 17 17"/>
+                      </svg>
                     </div>
                   </div>
-                ))}
-              </div>
+                  <h3 className="text-[15px] font-bold mb-1.5">{f.t}</h3>
+                  <p className="text-[12.5px] leading-relaxed" style={{ color: 'var(--muted)' }}>
+                    {f.d}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* ═══ TICKER 2 ═══ */}
-        <div className="py-3 overflow-hidden" style={{ borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
-          <div className="ticker">
-            <div className="ticker-track font-bold text-[11px] tracking-[3px] uppercase" style={{ color: 'var(--copper)', opacity: 0.35, animationDirection: 'reverse' }}>
-              {('REGISTRO · ANÁLISIS · PROYECCIÓN · DECISIONES · CONTROL · CRECIMIENTO · ').repeat(6)}
-            </div>
-          </div>
-        </div>
-
-        {/* ═══ BIO + PRICING ═══ */}
-        <section className="px-5 md:px-10 lg:px-16 py-20 md:py-28">
-          <div className="mx-auto max-w-[1400px] grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
-            {/* Bio */}
-            <div className="rounded-lg p-8 md:p-10" style={{ background: 'var(--bg2)', border: '1px solid var(--border)' }}>
-              <p className="text-[10px] font-bold uppercase tracking-[4px] mb-6" style={{ color: 'var(--copper)' }}>
-                Quién está detrás
+        {/* ═══ PRICING ═══ */}
+        <section id="precios" className="px-6 md:px-12 lg:px-20 py-20 md:py-28" style={{ borderTop: '1px solid var(--border)' }}>
+          <div className="mx-auto max-w-[1400px] flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[3px] mb-4" style={{ color: 'var(--gold)' }}>
+                Inversión mensual
               </p>
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0" style={{ border: '2px solid var(--copper)' }}>
-                  <Image src="/franco.jpg" alt="Franco Garcia" width={64} height={64} className="w-full h-full object-cover object-top" />
-                </div>
+              <div className="flex items-baseline gap-3">
+                <span className="text-[72px] md:text-[96px] font-extrabold font-mono tracking-tighter leading-none" style={{ color: 'var(--gold)' }}>
+                  800
+                </span>
                 <div>
-                  <div className="text-lg font-bold" style={{ color: 'var(--ivory)' }}>Capital CFO</div>
-                  <div className="text-xs font-mono" style={{ color: 'var(--copper)' }}>Asesoría Financiera</div>
+                  <div className="text-lg font-mono" style={{ color: 'var(--muted)' }}>S/</div>
+                  <div className="text-xs" style={{ color: 'var(--dim)' }}>/mes</div>
                 </div>
               </div>
-              <p className="text-sm leading-relaxed" style={{ color: 'var(--dim)' }}>
-                Administrador de Empresas con más de 8 años en finanzas corporativas.
-                Gerente en empresas líderes del país, en áreas de planeamiento
-                estratégico y control de gestión.
+              <p className="mt-5 max-w-md text-[13px] leading-relaxed" style={{ color: 'var(--muted)' }}>
+                Un consultor financiero senior cobra entre{' '}
+                <span className="font-mono font-semibold" style={{ color: 'var(--ivory)' }}>S/ 10,000</span>
+                {' '}y{' '}
+                <span className="font-mono font-semibold" style={{ color: 'var(--ivory)' }}>S/ 30,000</span>
+                {' '}al mes. Capital CFO te da el mismo análisis por una fracción.
               </p>
-              <div className="flex flex-wrap gap-2 mt-6">
-                {['MBA UNI', '+8 años', 'Finanzas', 'Estrategia'].map((t) => (
-                  <span key={t} className="text-[10px] font-mono font-medium px-3 py-1.5 uppercase tracking-wider" style={{ background: 'var(--bg3)', color: 'var(--cream)', border: '1px solid var(--border)' }}>
-                    {t}
-                  </span>
-                ))}
-              </div>
             </div>
 
-            {/* Pricing */}
-            <div className="flex flex-col justify-between">
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[4px] mb-6" style={{ color: 'var(--copper)' }}>
-                  Inversión
-                </p>
-                <div className="flex items-baseline gap-3 mb-4">
-                  <AnimatedCounter value={800} className="text-6xl md:text-7xl font-mono font-bold tracking-tighter" style={{ color: 'var(--copper)' }} duration={2000} />
-                  <div>
-                    <div className="text-lg font-mono" style={{ color: 'var(--dim)' }}>S/</div>
-                    <div className="text-xs" style={{ color: 'var(--dim)' }}>/mes</div>
-                  </div>
-                </div>
-                <p className="text-sm leading-relaxed max-w-sm" style={{ color: 'var(--dim)' }}>
-                  Un consultor financiero cobra entre{' '}
-                  <span className="font-mono font-semibold" style={{ color: 'var(--ivory)' }}>S/ 10,000</span>{' '}
-                  y{' '}
-                  <span className="font-mono font-semibold" style={{ color: 'var(--ivory)' }}>S/ 30,000</span>{' '}
-                  al mes.
-                </p>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-3 mt-8">
-                <Link href="/auth/register" className="cta-solid inline-flex items-center justify-center gap-3 px-8 py-4 text-sm uppercase tracking-wider">
-                  Activar prueba gratuita
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                </Link>
-                <Link href="/auth/login" className="cta-outline inline-flex items-center justify-center px-8 py-4 text-sm uppercase tracking-wider">
-                  Ya tengo cuenta
-                </Link>
-              </div>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link href="/auth/register" className="cta-gold inline-flex items-center justify-center gap-2 rounded-md px-7 py-3.5 text-[13px] font-semibold uppercase tracking-wider">
+                Comenzar prueba
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </Link>
+              <Link href="/auth/login" className="inline-flex items-center justify-center px-7 py-3.5 text-[13px] font-semibold uppercase tracking-wider rounded-md transition-colors" style={{ border: '1px solid var(--gold)', color: 'var(--gold)' }}>
+                Ya soy cliente
+              </Link>
             </div>
           </div>
         </section>
 
         {/* ═══ FOOTER ═══ */}
-        <footer className="px-5 md:px-10 lg:px-16 py-8 flex flex-col sm:flex-row items-center justify-between gap-4" style={{ borderTop: '1px solid var(--border)' }}>
-          <span className="text-[11px] font-mono" style={{ color: 'var(--dim)' }}>© 2026</span>
-          <span className="text-[11px]" style={{ color: 'var(--dim)' }}>Capital CFO</span>
+        <footer className="px-6 md:px-12 lg:px-20 py-8 flex flex-col sm:flex-row items-center justify-between gap-4" style={{ borderTop: '1px solid var(--border)' }}>
+          <div className="flex items-center gap-2">
+            <div className="logo-icon" style={{ width: 22, height: 22 }}>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="3 17 9 11 13 15 21 7" />
+              </svg>
+            </div>
+            <span className="text-[12px] font-bold tracking-tight">
+              Capital<span style={{ color: 'var(--gold)' }}>CFO</span>
+            </span>
+          </div>
+          <span className="text-[11px] font-mono" style={{ color: 'var(--dim)' }}>
+            © 2026 · Consultoría Financiera
+          </span>
         </footer>
       </div>
     </div>
