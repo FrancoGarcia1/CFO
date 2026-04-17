@@ -237,34 +237,35 @@ export default function RegisterChatPage() {
         />
       </div>
 
-      {/* ═══ MAIN ═══ */}
-      <main className="relative z-10 flex-1 min-h-0 flex flex-col items-center px-3 md:px-8 py-3 md:py-10 overflow-hidden">
-        <div className="w-full max-w-[620px] flex flex-col flex-1 min-h-0 relative">
-          {/* Apple Intelligence-style animated glow ring */}
-          <div
-            className="absolute inset-0 rounded-[32px] pointer-events-none"
-            style={{
-              opacity: isThinking ? 1 : 0.35,
-              transition: 'opacity .5s ease',
-              background: 'conic-gradient(from 0deg at 50% 50%, rgba(212,181,119,.6), rgba(168,196,122,.4), rgba(218,158,98,.5), rgba(200,161,90,.6), rgba(212,181,119,.6))',
-              filter: 'blur(40px)',
-              animation: 'spinSlow 8s linear infinite',
-              zIndex: -1,
-            }}
-          />
+      {/* ═══ Apple Intelligence glow (fixed bg, no afecta layout) ═══ */}
+      <div
+        className="hidden sm:block fixed pointer-events-none z-0"
+        style={{
+          top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '680px', height: '680px',
+          opacity: isThinking ? 1 : 0.3,
+          transition: 'opacity .5s ease',
+          background: 'conic-gradient(from 0deg at 50% 50%, rgba(212,181,119,.5), rgba(168,196,122,.3), rgba(218,158,98,.4), rgba(200,161,90,.5), rgba(212,181,119,.5))',
+          filter: 'blur(50px)',
+          animation: 'spinSlow 8s linear infinite',
+        }}
+      />
 
-          {/* Crystalline glass surface — flex-1 para llenar espacio disponible */}
-          <div className="relative flex flex-col flex-1 min-h-0 rounded-[24px] overflow-hidden" style={{
+      {/* ═══ MAIN — full viewport mobile, card on desktop ═══ */}
+      <main className="relative z-10 flex-1 min-h-0 flex flex-col items-center overflow-hidden sm:px-6 sm:py-8">
+        <div
+          className="w-full flex flex-col flex-1 min-h-0 sm:max-w-[620px] sm:rounded-[24px] sm:overflow-hidden"
+          style={{
             background: 'linear-gradient(135deg, rgba(22,19,16,.72) 0%, rgba(13,11,10,.6) 100%)',
             backdropFilter: 'saturate(180%) blur(40px)',
             WebkitBackdropFilter: 'saturate(180%) blur(40px)',
-            border: '1px solid rgba(255,255,255,.06)',
-            boxShadow: `
-              0 1px 0 rgba(255,255,255,.04) inset,
-              0 -1px 0 rgba(0,0,0,.4) inset,
-              0 40px 100px -20px rgba(0,0,0,.8)
-            `,
-          }}>
+          }}
+        >
+          {/* Top specular highlight (solo desktop con card) */}
+          <div className="hidden sm:block absolute top-0 left-[10%] right-[10%] h-px" style={{
+            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,.15) 50%, transparent)',
+          }}/>
             {/* Top specular highlight */}
             <div className="absolute top-0 left-[10%] right-[10%] h-px" style={{
               background: 'linear-gradient(90deg, transparent, rgba(255,255,255,.15) 50%, transparent)',
@@ -527,15 +528,14 @@ export default function RegisterChatPage() {
             </div>
           </div>
 
-          {/* Footer — solo desktop (en mobile ocupa espacio crítico) */}
-          <div className="hidden sm:flex flex-shrink-0 items-center justify-between mt-4 text-[11px]" style={{ color: 'rgba(245,240,232,.35)' }}>
+          {/* Footer — solo desktop */}
+          <div className="hidden sm:flex flex-shrink-0 items-center justify-between px-6 pb-4 pt-2 text-[11px]" style={{ color: 'rgba(245,240,232,.35)' }}>
             <Link href="/auth/login" className="transition-colors hover:text-[color:#c8a15a]" style={{ color: 'rgba(200,161,90,.75)' }}>
               Iniciar sesión
             </Link>
             <span>7 días gratis · Sin tarjeta</span>
           </div>
-        </div>
-      </main>
+        </main>
 
       {/* ═══ TRUST SHEET — iOS 26 liquid glass style ═══ */}
       {showTrust && (
