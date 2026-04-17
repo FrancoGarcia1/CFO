@@ -38,7 +38,20 @@ export default function RegisterChatPage() {
   const [isThinking, setIsThinking] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const typingStepRef = useRef<number>(-1);
+  const [isTouch, setIsTouch] = useState(false);
   const step = SCRIPT[stepIdx];
+
+  useEffect(() => {
+    const mq = window.matchMedia('(hover: none), (pointer: coarse)');
+    setIsTouch(mq.matches);
+  }, []);
+
+  function handleInputFocus() {
+    // En mobile: al abrir el teclado, scroll al último mensaje para que se vea
+    setTimeout(() => {
+      scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
+    }, 300);
+  }
 
   const questionSteps = SCRIPT.filter((s) => s.field !== null).length;
   const currentQ = SCRIPT.slice(0, stepIdx).filter((s) => s.field !== null).length;
@@ -114,10 +127,16 @@ export default function RegisterChatPage() {
   const isQuestion = !!step?.field;
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden" style={{
-      background: '#050404',
-      fontFamily: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif",
-    }}>
+    <div
+      className="flex flex-col relative overflow-hidden"
+      style={{
+        minHeight: '100dvh',
+        height: '100dvh',
+        background: '#050404',
+        fontFamily: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif",
+        paddingBottom: 'env(safe-area-inset-bottom)',
+      }}
+    >
       {/* ═══ MESH GRADIENT BACKGROUND (animated) ═══ */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute w-[900px] h-[900px] rounded-full" style={{
@@ -454,10 +473,11 @@ export default function RegisterChatPage() {
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
                       onKeyDown={(e) => { if (e.key === 'Enter') handleSend(); }}
-                      autoFocus
+                      onFocus={handleInputFocus}
+                      autoFocus={!isTouch}
                       autoComplete={step.type === 'password' ? 'new-password' : 'off'}
-                      className="flex-1 min-w-0 py-3 bg-transparent text-[14.5px] outline-none font-medium tracking-[-0.01em]"
-                      style={{ color: '#f5f0e8' }}
+                      className="flex-1 min-w-0 py-3 bg-transparent outline-none font-medium tracking-[-0.01em]"
+                      style={{ color: '#f5f0e8', fontSize: '16px' }}
                     />
                     <button
                       onClick={handleSend}
