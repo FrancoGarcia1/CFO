@@ -12,6 +12,7 @@ import { useForecast } from '@/hooks/use-forecast';
 import { useAuth } from '@/providers/auth-provider';
 import { useCurrency } from '@/hooks/use-currency';
 import { exportCSV, exportPnLCSV, exportPnLGerencialCSV } from '@/utils/csv-export';
+import { exportPnLGerencialXLSX } from '@/utils/xlsx-export';
 import { generatePDFReport } from '@/utils/pdf-export';
 import { MONTHS } from '@/utils/constants';
 import { fmt } from '@/utils/formatters';
@@ -108,16 +109,27 @@ export default function ReportesPage() {
 
   const exportCards: ExportCard[] = [
     {
+      icon: '\uD83D\uDCD1',
+      title: 'Informe Gerencial Completo (XLSX)',
+      description: '8 hojas con fórmulas vivas: P&L, Dashboard, Comparativo vs PSTO, Indicadores Operativos, Punto de Equilibrio, Estrategia de Precios, Simulador y base de Datos.',
+      action: () => exportPnLGerencialXLSX({
+        transactions,
+        year: viewYear,
+        empresa: profile?.empresa ?? 'MI EMPRESA',
+      }),
+      buttonLabel: 'Exportar Informe (8 hojas)',
+      isPrimary: true,
+    },
+    {
       icon: '\uD83D\uDCCA',
-      title: 'P&L Gerencial Anual',
-      description: 'Informe mensual con Ene-Dic, totales y márgenes por categoría.',
+      title: 'P&L Gerencial Anual (CSV)',
+      description: 'Formato plano CSV para importar a otros sistemas (1 sola hoja).',
       action: () => exportPnLGerencialCSV({
         transactions,
         year: viewYear,
         empresa: profile?.empresa ?? 'MI EMPRESA',
       }),
-      buttonLabel: 'Exportar P&L Anual',
-      isPrimary: true,
+      buttonLabel: 'Exportar P&L CSV',
     },
     {
       icon: '\uD83D\uDCC8',
