@@ -156,20 +156,71 @@ export default function LandingPage() {
         </div>
 
         {/* ═══ FOOTER ═══ */}
-        <footer className="px-6 md:px-12 lg:px-20 py-8 flex flex-col sm:flex-row items-center justify-between gap-4" style={{ borderTop: '1px solid var(--border)' }}>
-          <div className="flex items-center gap-2">
-            <div className="logo-icon" style={{ width: 22, height: 22 }}>
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="3 17 9 11 13 15 21 7" />
-              </svg>
+        <footer className="px-6 md:px-12 lg:px-20 py-10" style={{ borderTop: '1px solid var(--border)' }}>
+          <div className="mx-auto max-w-[1400px]">
+            <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr_1fr] gap-8 mb-8">
+              {/* Brand + parent company */}
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="logo-icon" style={{ width: 26, height: 26 }}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="3 17 9 11 13 15 21 7" />
+                    </svg>
+                  </div>
+                  <span className="text-[14px] font-bold tracking-tight">
+                    Capital<span style={{ color: 'var(--gold)' }}>CFO</span>
+                  </span>
+                </div>
+                <p className="text-[11px] leading-relaxed mb-2" style={{ color: 'var(--muted)' }}>
+                  Tu CFO senior virtual. Dashboard financiero, forecast, simulador y consultor IA.
+                </p>
+                <p className="text-[10px] font-mono uppercase tracking-[2px] mt-4" style={{ color: 'var(--dim)' }}>
+                  Producto de
+                </p>
+                <p className="text-[12px] font-semibold mt-1" style={{ color: 'var(--ivory)' }}>
+                  Capital Founder Consulting <span style={{ color: 'var(--muted)' }}>E.I.R.L.</span>
+                </p>
+              </div>
+
+              {/* Contacto */}
+              <div>
+                <p className="text-[10px] font-mono font-bold uppercase tracking-[2px] mb-3" style={{ color: 'var(--gold)' }}>
+                  Contacto
+                </p>
+                <ul className="space-y-1.5 text-[12px]" style={{ color: 'var(--muted)' }}>
+                  <li>
+                    <a href="mailto:contacto@capitalfounderconsulting.com" className="transition-colors hover:text-[color:var(--gold)]">
+                      contacto@capitalfounderconsulting.com
+                    </a>
+                  </li>
+                  <li>Lima, Perú</li>
+                </ul>
+              </div>
+
+              {/* Producto */}
+              <div>
+                <p className="text-[10px] font-mono font-bold uppercase tracking-[2px] mb-3" style={{ color: 'var(--gold)' }}>
+                  Producto
+                </p>
+                <ul className="space-y-1.5 text-[12px]" style={{ color: 'var(--muted)' }}>
+                  <li><a href="#servicios" className="transition-colors hover:text-[color:var(--gold)]">Servicios</a></li>
+                  <li><a href="#precios" className="transition-colors hover:text-[color:var(--gold)]">Precios</a></li>
+                  <li><a href="/auth/login" className="transition-colors hover:text-[color:var(--gold)]">Iniciar sesión</a></li>
+                  <li><a href="/auth/register" className="transition-colors hover:text-[color:var(--gold)]">Crear cuenta</a></li>
+                </ul>
+              </div>
             </div>
-            <span className="text-[12px] font-bold tracking-tight">
-              Capital<span style={{ color: 'var(--gold)' }}>CFO</span>
-            </span>
+
+            {/* Bottom bar */}
+            <div className="pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[10px] font-mono" style={{ borderTop: '1px solid var(--border)', color: 'var(--dim)' }}>
+              <span>
+                © 2026 · Capital Founder Consulting E.I.R.L. · Todos los derechos reservados
+              </span>
+              <span>
+                Lima, Perú · capitalfounder.pe
+              </span>
+            </div>
           </div>
-          <span className="text-[11px] font-mono" style={{ color: 'var(--dim)' }}>
-            © 2026 · Consultoría Financiera
-          </span>
         </footer>
       </div>
     </div>

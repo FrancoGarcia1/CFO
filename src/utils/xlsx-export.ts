@@ -232,7 +232,7 @@ function buildPnlGerencial(
 
   // Row 2 — subtitulo
   ws.mergeCells('A2:P2');
-  ws.getCell('A2').value = `RUC: ${params.ruc ?? '—'}  |  Moneda: ${params.moneda ?? 'S/ Soles'}  |  Ejercicio: Enero–Diciembre ${params.year}`;
+  ws.getCell('A2').value = `RUC: ${params.ruc ?? '—'}  |  Moneda: ${params.moneda ?? 'S/ Soles'}  |  Ejercicio: Enero–Diciembre ${params.year}  |  Generado por Capital CFO · Capital Founder Consulting E.I.R.L.`;
   styleSubtitle(ws.getCell('A2'));
 
   // Row 4 — headers
@@ -1163,7 +1163,9 @@ export async function exportPnLGerencialXLSX(params: ExportParams): Promise<void
   const data = aggregate(transactions, year);
 
   const wb = new ExcelJS.Workbook();
-  wb.creator = 'Capital CFO';
+  wb.creator = 'Capital CFO — Capital Founder Consulting E.I.R.L.';
+  wb.company = 'Capital Founder Consulting E.I.R.L.';
+  wb.subject = `Informe Gerencial ${year} — generado por Capital CFO`;
   wb.created = new Date();
   wb.modified = new Date();
   wb.properties.date1904 = false;

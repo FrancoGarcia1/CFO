@@ -268,7 +268,8 @@ export function generatePDFReport(params: {
   </div>
 
   <div class="footer">
-    Generado por Capital CFO
+    Generado por Capital CFO · Capital Founder Consulting E.I.R.L.<br/>
+    contacto@capitalfounderconsulting.com · Lima, Perú
   </div>
 
   <script>window.onload = function() { window.print(); }</script>

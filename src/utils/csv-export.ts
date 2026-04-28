@@ -147,6 +147,7 @@ export function exportPnLGerencialCSV(params: {
   // Header
   rows.push([`${empresa} — P&L GERENCIAL ${year}`]);
   if (ruc) rows.push([`RUC: ${ruc}  |  Moneda: S/ Soles  |  Ejercicio: Enero–Diciembre ${year}`]);
+  rows.push([`Generado por Capital CFO · Capital Founder Consulting E.I.R.L. · contacto@capitalfounderconsulting.com`]);
   rows.push([]);
 
   // Column headers

@@ -59,9 +59,14 @@ export function Header() {
     <>
       <header className="sticky top-0 z-50" style={{ background: '#0f0c0a' }}>
         <div className="mx-auto flex max-w-[1200px] items-center justify-between px-5 py-3">
-          <span className="text-sm tracking-tight" style={{ color: '#f5f0e8' }}>
-            <span className="font-bold">Capital CFO</span>
-          </span>
+          <div className="flex flex-col leading-tight">
+            <span className="text-sm tracking-tight font-bold" style={{ color: '#f5f0e8' }}>
+              Capital CFO
+            </span>
+            <span className="text-[9px] font-mono uppercase tracking-[2px] hidden sm:block" style={{ color: 'rgba(245,240,232,.5)' }}>
+              by Capital Founder Consulting
+            </span>
+          </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
             <CurrencySelector />
@@ -198,8 +203,8 @@ export function Header() {
                 <div className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: '#c8a15a' }}>
                   Correo de soporte
                 </div>
-                <a href="mailto:contacto@vcfo.ai" className="text-sm font-mono transition-colors" style={{ color: '#f5f0e8' }}>
-                  contacto@vcfo.ai
+                <a href="mailto:contacto@capitalfounderconsulting.com" className="text-sm font-mono transition-colors break-all" style={{ color: '#f5f0e8' }}>
+                  contacto@capitalfounderconsulting.com
                 </a>
               </div>
 
@@ -222,8 +227,9 @@ export function Header() {
               </div>
             </div>
 
-            <p className="mt-5 text-xs text-center" style={{ color: 'rgba(200,161,90,.3)' }}>
-              Capital CFO
+            <p className="mt-5 text-[11px] text-center leading-relaxed" style={{ color: 'rgba(200,161,90,.4)' }}>
+              Capital CFO<br/>
+              <span style={{ color: 'rgba(245,240,232,.35)' }}>by Capital Founder Consulting E.I.R.L.</span>
             </p>
           </div>
         </div>
