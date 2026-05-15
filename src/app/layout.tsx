@@ -4,12 +4,12 @@ import { QueryProvider } from '@/providers/query-provider';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Capital CFO — Tu CFO Senior Virtual',
+  title: 'Capital Founder Consulting — Decisiones que hacen crecer negocios',
   description:
-    'IA que registra tus finanzas, analiza tu P&L, genera proyecciones y te dice exactamente qué hacer — como un CFO con 8 años de experiencia. Producto de Capital Founder Consulting E.I.R.L.',
-  applicationName: 'Capital CFO',
-  authors: [{ name: 'Capital Founder Consulting E.I.R.L.', url: 'https://capitalfounder.pe' }],
-  keywords: ['CFO virtual', 'consultoría financiera', 'P&L', 'forecast', 'Capital Founder Consulting', 'PyMEs LatAm'],
+    'Consultora integral peruana. Rigor financiero, pensamiento estratégico y tecnología aplicada para empresas medianas, emprendedores y startups en LatAm.',
+  applicationName: 'Capital Founder Consulting',
+  authors: [{ name: 'Capital Founder Consulting E.I.R.L.', url: 'https://capitalfounderconsulting.com' }],
+  keywords: ['consultora integral', 'finanzas', 'estrategia', 'tecnología', 'Capital CFO', 'CFO virtual', 'Capital Founder Consulting', 'PyMEs LatAm', 'Lima Perú'],
 };
 
 export default function RootLayout({
