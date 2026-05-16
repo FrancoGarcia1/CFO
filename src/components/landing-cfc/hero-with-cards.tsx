@@ -60,18 +60,29 @@ function fanSlotFor(productIdx: number): number {
   return productIdx; // 4→4, 5→5, 6→6, 7→7
 }
 
-/* ─── CASCADE: diagonal desktop · pila vertical compacta en mobile (debajo del headline) ─── */
+/* ─── CASCADE/ORBIT: diagonal en desktop · orbit elíptico en mobile (gira infinito) ─── */
+const MOBILE_ORBIT_RADIUS_X = 145;
+const MOBILE_ORBIT_RADIUS_Y = 46; // elipse aplastada (gira horizontalmente con perspectiva)
+const MOBILE_ORBIT_CENTER_Y_OFFSET = 30;
+
+function orbitPoseMobile(slotIdx: number, orbitTime: number) {
+  // Cada card ocupa una posición angular sobre el anillo
+  const angle = (slotIdx / 8) * Math.PI * 2 + orbitTime * 0.55; // 0.55 rad/seg
+  const cosA = Math.cos(angle);
+  return {
+    x: Math.sin(angle) * MOBILE_ORBIT_RADIUS_X,
+    y: cosA * MOBILE_ORBIT_RADIUS_Y + MOBILE_ORBIT_CENTER_Y_OFFSET,
+    rotate: -Math.sin(angle) * 6,        // leve tilt 3D
+    scale: 0.68 + ((cosA + 1) / 2) * 0.18, // 0.68-0.86 (cerca = grande, lejos = chica)
+    // z: cards "al frente" (cosA cerca de 1) sobre las demás
+    z: Math.round(((cosA + 1) / 2) * 12),
+  };
+}
+
 function cascadeFor(slotIdx: number, isMobile: boolean) {
   if (isMobile) {
-    // Mobile: cards apiladas verticalmente con leve diagonal hacia la derecha.
-    // Rango y reducido (~330px) para caber bajo el headline; ancla más abajo.
-    return {
-      x: -50 + slotIdx * 16,    // rango -50 a +62 (centrado, leve drift derecho)
-      y: -165 + slotIdx * 47,   // rango -165 a +164 (compacto vertical, cabe lower-half)
-      rotate: -5 + slotIdx * 1.4,
-      scale: 0.74,
-      z: 8 - slotIdx,
-    };
+    // Mobile: pose inicial del orbit (sin tiempo, será la posición de aterrizaje al final del scroll)
+    return { ...orbitPoseMobile(slotIdx, 0) };
   }
   return {
     x: -130 + slotIdx * 65,
@@ -356,6 +367,7 @@ export function HeroWithCards() {
   const [introDone, setIntroDone] = useState(false);
   const [mouse, setMouse] = useState({ x: 0.5, y: 0.5 });
   const [isMobile, setIsMobile] = useState(false);
+  const [orbitT, setOrbitT] = useState(0);
 
   /* Mobile detect */
   useEffect(() => {
@@ -428,6 +440,23 @@ export function HeroWithCards() {
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, []);
+
+  /* Orbit infinito — solo mobile, arranca cuando la coreografía está al final del scroll */
+  useEffect(() => {
+    if (!isMobile) return;
+    const lp = Math.max(lockProgress, 0.1);
+    const orbitFloor = lp * 0.70; // mientras transita FAN→ORBIT, ya estamos sumando tiempo (transición fluida)
+    if (scrollProgress < orbitFloor) return;
+    let raf = 0;
+    const start = performance.now() - orbitT * 1000;
+    function tick(now: number) {
+      setOrbitT((now - start) / 1000);
+      raf = requestAnimationFrame(tick);
+    }
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMobile, scrollProgress >= (Math.max(lockProgress, 0.1) * 0.70)]);
 
   /* Mouse parallax (Hero) */
   useEffect(() => {
@@ -649,9 +678,6 @@ export function HeroWithCards() {
             pose = getScrollPose(i, scrollProgress, lockProgress, isMobile);
           }
 
-          // Anchor: durante FAN/STACK ancla al centro; durante CASCADE se mueve.
-          // Desktop: cascada va a la derecha (sale del headline izquierdo).
-          // Mobile: cascada centrada horizontal pero DEBAJO del headline (anclaje y=72%).
           const lp = Math.max(lockProgress, 0.1);
           const cascadeBlend = clamp((scrollProgress - lp * 0.70) / (lp - lp * 0.70), 0, 1);
           const cascadeAnchorX = isMobile ? viewport.w * 0.50 : viewport.w * 0.68;
@@ -661,7 +687,26 @@ export function HeroWithCards() {
 
           const slot = fanSlotFor(i);
           const FAN = isMobile ? FAN_MOBILE : FAN_DESKTOP;
-          const zIdx = isLead ? 20 : FAN[slot].z + 5;
+          let zIdx: number = isLead ? 20 : FAN[slot].z + 5;
+
+          // ─── ORBIT mobile: cuando entramos a la fase de cascade, las cards orbitan ──
+          // El orbitT corre continuamente, y vamos crossfading desde el cascade
+          // estático (orbit en t=0) hacia el orbit animado (orbit en tiempo).
+          if (isMobile && introDone) {
+            const orbitMix = cascadeBlend; // 0..1 (encaja con la fase final del scroll)
+            if (orbitMix > 0) {
+              const live = orbitPoseMobile(slot, orbitT);
+              pose = {
+                x: lerp(pose.x, live.x, orbitMix),
+                y: lerp(pose.y, live.y, orbitMix),
+                rotate: lerp(pose.rotate, live.rotate, orbitMix),
+                scale: lerp(pose.scale, live.scale, orbitMix),
+              };
+              // Z dinámico: cards "al frente" del orbit van arriba
+              zIdx = Math.round(lerp(zIdx, live.z, orbitMix));
+              if (isLead) zIdx += 8;
+            }
+          }
 
           return (
             <div
