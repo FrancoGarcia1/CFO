@@ -221,7 +221,7 @@ function CardVisual({ product, accent, isLead, orderNum, isMobile }: {
     <div
       className="relative w-full h-full rounded-2xl overflow-hidden"
       style={{
-        // Brutalist: backgrounds sólidos, sin gradientes warm. Lead con leve gradient gold-on-black.
+        // Brutalist: backgrounds sólidos. Lead con leve gradient gold-on-black.
         background: isLead
           ? `linear-gradient(135deg, #1a1409 0%, #050505 55%, #1a1409 100%)`
           : isMobile
@@ -230,9 +230,15 @@ function CardVisual({ product, accent, isLead, orderNum, isMobile }: {
         borderStyle: 'solid',
         borderWidth: '1.5px',
         borderColor: isLead ? `${C.bronze}cc` : accent,
-        boxShadow: isLead
-          ? `0 1px 0 rgba(255,255,255,.10) inset, 0 -1px 0 rgba(0,0,0,.8) inset, 0 30px 60px -20px rgba(0,0,0,.95), 0 0 ${isMobile ? 60 : 80}px ${C.bronze}${isMobile ? '88' : '55'}`
-          : `0 0 0 1px ${accent}66 inset, 0 16px 40px -14px rgba(0,0,0,.95), 0 0 ${isMobile ? 45 : 40}px ${accent}${isMobile ? 'aa' : '55'}`,
+        // Mobile: shadows simplificadas (sin blur de 80px, devastador en GPU mobile)
+        // Desktop: glow completo
+        boxShadow: isMobile
+          ? (isLead
+              ? `0 8px 24px -8px rgba(0,0,0,.9), 0 0 24px ${C.bronze}55`
+              : `0 6px 16px -6px rgba(0,0,0,.9), 0 0 18px ${accent}55`)
+          : (isLead
+              ? `0 1px 0 rgba(255,255,255,.10) inset, 0 -1px 0 rgba(0,0,0,.8) inset, 0 30px 60px -20px rgba(0,0,0,.95), 0 0 80px ${C.bronze}55`
+              : `0 0 0 1px ${accent}66 inset, 0 16px 40px -14px rgba(0,0,0,.95), 0 0 40px ${accent}55`),
       }}
     >
       {isLead && (
@@ -407,9 +413,12 @@ export function HeroWithCards() {
     };
   }, []);
 
-  /* Scroll */
+  /* Scroll throttled con rAF — un update por frame, no por evento (mobile-friendly) */
   useEffect(() => {
-    function onScroll() {
+    let raf = 0;
+    let queued = false;
+    function compute() {
+      queued = false;
       const containerEl = containerRef.current;
       if (!containerEl) return;
       const rect = containerEl.getBoundingClientRect();
@@ -417,9 +426,17 @@ export function HeroWithCards() {
       const progress = clamp(-rect.top / sh, 0, 1);
       setScrollProgress(progress);
     }
-    onScroll();
+    function onScroll() {
+      if (queued) return;
+      queued = true;
+      raf = requestAnimationFrame(compute);
+    }
+    compute();
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(raf);
+    };
   }, []);
 
   /* Intro animation rAF — duration 3.7s */
@@ -457,18 +474,27 @@ export function HeroWithCards() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMobile, scrollProgress >= (Math.max(lockProgress, 0.1) * 0.70)]);
 
-  /* Mouse parallax (Hero) */
+  /* Mouse parallax (Hero) — desactivado en mobile (no hay mouse + ahorra perf) */
   useEffect(() => {
+    if (isMobile) return;
+    let raf = 0;
+    let queued = false;
+    let nx = 0.5, ny = 0.5;
     function handle(e: MouseEvent) {
       if (!containerRef.current) return;
       const r = containerRef.current.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width;
-      const y = (e.clientY - r.top) / Math.min(r.height, window.innerHeight);
-      setMouse({ x: clamp(x), y: clamp(y) });
+      nx = clamp((e.clientX - r.left) / r.width);
+      ny = clamp((e.clientY - r.top) / Math.min(r.height, window.innerHeight));
+      if (queued) return;
+      queued = true;
+      raf = requestAnimationFrame(() => { queued = false; setMouse({ x: nx, y: ny }); });
     }
     window.addEventListener('mousemove', handle);
-    return () => window.removeEventListener('mousemove', handle);
-  }, []);
+    return () => {
+      window.removeEventListener('mousemove', handle);
+      cancelAnimationFrame(raf);
+    };
+  }, [isMobile]);
 
   // Las cards deben acompañar TODO el scroll del container (Hero + Suite Transition).
   // Solo se "sueltan" cuando el container termina (progress = 1), no antes.
@@ -716,12 +742,14 @@ export function HeroWithCards() {
                 left: 0,
                 width: CARD_W,
                 height: CARD_H,
-                transform: `translate(${anchorX + pose.x - CARD_W / 2}px, ${anchorY + pose.y - CARD_H / 2}px) rotate(${pose.rotate}deg) scale(${pose.scale})`,
+                // translate3d fuerza capa GPU dedicada → scroll fluido en mobile
+                transform: `translate3d(${anchorX + pose.x - CARD_W / 2}px, ${anchorY + pose.y - CARD_H / 2}px, 0) rotate(${pose.rotate}deg) scale(${pose.scale})`,
                 transformOrigin: 'center center',
-                willChange: 'transform, opacity',
+                willChange: 'transform',
                 opacity,
                 transition: introDone ? 'none' : 'opacity .25s ease-out',
                 zIndex: zIdx,
+                backfaceVisibility: 'hidden',
               }}
             >
               <CardVisual product={p} accent={accent} isLead={isLead} orderNum={i + 1} isMobile={isMobile} />
