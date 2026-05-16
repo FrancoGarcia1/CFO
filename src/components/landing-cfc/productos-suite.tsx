@@ -537,9 +537,9 @@ export function ProductosSuite() {
                     {/* Tag próximamente */}
                     <div className="relative flex items-center justify-between mb-4">
                       <span className="text-[8.5px] font-mono font-bold uppercase tracking-[2.5px] px-2 py-0.5 rounded" style={{
-                        background: 'rgba(240,233,221,.04)',
+                        background: 'rgba(255,255,255,.03)',
                         color: C.dim,
-                        border: `1px solid rgba(240,233,221,.1)`,
+                        border: `1px solid rgba(255,255,255,.10)`,
                       }}>
                         Próximamente
                       </span>
@@ -561,7 +561,7 @@ export function ProductosSuite() {
                       {p.tag}
                     </p>
 
-                    <p className="relative text-[12.5px] leading-[1.55] mb-4" style={{ color: 'rgba(240,233,221,.55)' }}>
+                    <p className="relative text-[12.5px] leading-[1.55] mb-4" style={{ color: 'rgba(255,255,255,.62)' }}>
                       {p.descripcion}
                     </p>
 

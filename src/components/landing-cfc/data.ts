@@ -1,28 +1,30 @@
-/* ═══ Capital Founder Consulting — Identidad visual propia ═══
-   Paleta: carbón cálido + bronce + dorado claro + salvia para Tech
-   Diferenciada de Capital CFO (que usa gold puro #c8a15a sobre #0a0a0a)
+/* ═══ Capital Founder Consulting — Identidad visual brutalismo refinado ═══
+   Paleta: negro puro + champagne gold (más cool, menos warm) + blanco crisp.
+   Bordes nítidos, geometría limpia, contraste máximo.
 */
 
 export const CFC_COLORS = {
-  bg: '#0e0a07',          // carbón cálido (más warm que el #0a0a0a de CFO)
-  bgCard: '#181210',
-  border: 'rgba(164, 113, 72, 0.15)',
-  borderStrong: 'rgba(164, 113, 72, 0.35)',
+  bg: '#000000',          // negro puro — brutalist
+  bgCard: '#0a0a0a',      // casi negro (mantiene cards distinguidas)
+  border: 'rgba(212, 183, 106, 0.18)',   // champagne gold @ 18%
+  borderStrong: 'rgba(212, 183, 106, 0.45)',
 
-  bronze: '#a47148',       // bronce — accent principal
-  bronzeLight: '#c89570',  // bronce claro
-  bronzeDeep: '#7a543a',   // bronce profundo
-  goldFoil: '#d4a574',     // dorado claro (puente con CFO)
+  // Accent principal: champagne gold (más cool/sophisticated que el bronce cálido)
+  bronze: '#d4b76a',        // champagne gold (alias `bronze` por compatibilidad)
+  bronzeLight: '#e8d18a',   // champagne light (highlights)
+  bronzeDeep: '#a08540',    // champagne deep (sombras, profundidad)
+  goldFoil: '#f5deb3',      // wheat gold (luminoso, casi blanco)
 
-  // Acentos por área (3 pilares)
-  finanzas: '#9eb8c8',     // azul acero suave (Entender)
-  estrategia: '#c89570',   // bronce dorado (Decidir) — se conecta con la marca
-  tech: '#7a8e6a',         // verde salvia (Ejecutar)
+  // Acentos por área (3 pilares) — más cool y nítidos
+  finanzas: '#8ea6c4',     // acero frío (Entender) — más nítido
+  estrategia: '#d4b76a',   // champagne (Decidir) — alineado con la marca
+  tech: '#7da38a',         // salvia más fría (Ejecutar)
 
-  ivory: '#f0e9dd',         // ivory más cálido
-  muted: 'rgba(240, 233, 221, 0.6)',
-  dim: 'rgba(240, 233, 221, 0.35)',
-  black: '#0a0705',
+  // Texto: blanco crisp en lugar de ivory cálido
+  ivory: '#ffffff',         // blanco puro — máximo contraste
+  muted: 'rgba(255, 255, 255, 0.62)', // gris neutral (no warm)
+  dim: 'rgba(255, 255, 255, 0.35)',
+  black: '#000000',
 };
 
 export const HERO_CONTENT = {

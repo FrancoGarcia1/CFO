@@ -221,19 +221,18 @@ function CardVisual({ product, accent, isLead, orderNum, isMobile }: {
     <div
       className="relative w-full h-full rounded-2xl overflow-hidden"
       style={{
+        // Brutalist: backgrounds sólidos, sin gradientes warm. Lead con leve gradient gold-on-black.
         background: isLead
-          ? `linear-gradient(135deg, #2a1d12 0%, #0d0805 50%, #2a1d12 100%)`
+          ? `linear-gradient(135deg, #1a1409 0%, #050505 55%, #1a1409 100%)`
           : isMobile
-            // Mobile próximamente: tinte de pilar visible — bg cálido con accent infusion
-            ? `linear-gradient(170deg, ${accent}22 0%, #2a1f15 60%, #18120e 100%)`
-            : `linear-gradient(180deg, #322519 0%, #1f1814 100%)`,
+            ? `linear-gradient(170deg, ${accent}1a 0%, #0a0a0a 60%, #050505 100%)`
+            : `linear-gradient(180deg, #141414 0%, #0a0a0a 100%)`,
         borderStyle: 'solid',
-        borderWidth: isMobile ? '2px' : '2px',
-        borderColor: isLead ? `${C.bronze}d0` : accent,
+        borderWidth: '1.5px',
+        borderColor: isLead ? `${C.bronze}cc` : accent,
         boxShadow: isLead
-          ? `0 1px 0 rgba(255,255,255,.10) inset, 0 -1px 0 rgba(0,0,0,.6) inset, 0 30px 60px -20px rgba(0,0,0,.95), 0 0 ${isMobile ? 60 : 80}px ${C.bronze}${isMobile ? '99' : '66'}`
-          : `0 0 0 1px ${accent}88 inset, 0 1px 0 rgba(255,255,255,.2) inset, 0 16px 40px -14px rgba(0,0,0,.95), 0 0 ${isMobile ? 50 : 50}px ${accent}${isMobile ? 'cc' : '70'}`,
-        backdropFilter: 'blur(14px)',
+          ? `0 1px 0 rgba(255,255,255,.10) inset, 0 -1px 0 rgba(0,0,0,.8) inset, 0 30px 60px -20px rgba(0,0,0,.95), 0 0 ${isMobile ? 60 : 80}px ${C.bronze}${isMobile ? '88' : '55'}`
+          : `0 0 0 1px ${accent}66 inset, 0 16px 40px -14px rgba(0,0,0,.95), 0 0 ${isMobile ? 45 : 40}px ${accent}${isMobile ? 'aa' : '55'}`,
       }}
     >
       {isLead && (
@@ -272,9 +271,9 @@ function CardVisual({ product, accent, isLead, orderNum, isMobile }: {
             </span>
           ) : (
             <span className="text-[7.5px] font-mono font-bold uppercase tracking-[2px] px-1.5 py-0.5 rounded" style={{
-              background: 'rgba(240,233,221,.04)',
+              background: 'rgba(255,255,255,.03)',
               color: C.dim,
-              border: `1px solid rgba(240,233,221,.1)`,
+              border: `1px solid rgba(255,255,255,.10)`,
             }}>
               Próximamente
             </span>

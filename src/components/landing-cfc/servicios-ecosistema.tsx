@@ -306,7 +306,7 @@ function AreaBeat({ area, index }: { area: typeof AREAS[number]; index: number }
               key={s}
               className="flex items-start gap-2 text-[12.5px] md:text-[13px] leading-[1.5]"
               style={{
-                color: 'rgba(240,233,221,.85)',
+                color: 'rgba(255,255,255,.88)',
                 animation: `cfcBeatItem .5s ${0.05 + j * 0.04}s cubic-bezier(.16,1,.3,1) both`,
               }}
             >
