@@ -6,6 +6,7 @@ import { ProductosSuite } from '@/components/landing-cfc/productos-suite';
 import { PropuestaValor } from '@/components/landing-cfc/propuesta-valor';
 import { ParaQuien } from '@/components/landing-cfc/para-quien';
 import { CtaFinal } from '@/components/landing-cfc/cta-final';
+import { ScrollIndicator } from '@/components/landing-cfc/scroll-indicator';
 import { CFC_COLORS as C } from '@/components/landing-cfc/data';
 
 /**
@@ -100,6 +101,9 @@ export default function CapitalFounderConsultingPage() {
           Contacto
         </a>
       </nav>
+
+      {/* Scroll indicator chevrons fijos (desktop) */}
+      <ScrollIndicator />
 
       {/* ═══ SECCIONES ═══ */}
       <HeroCFC />

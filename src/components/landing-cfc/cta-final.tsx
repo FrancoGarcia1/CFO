@@ -144,23 +144,34 @@ export function CtaFinal() {
           transform: visible ? 'translateY(0)' : 'translateY(15px)',
           transition: 'opacity .9s .45s cubic-bezier(.16,1,.3,1), transform .9s .45s cubic-bezier(.16,1,.3,1)',
         }}>
-          {/* CTA Principal — liquid glass + chromatic shine */}
-          <a
-            href="mailto:contacto@capitalfounderconsulting.com?subject=Quiero%20agendar%20una%20consulta%20con%20Capital%20Founder"
-            className="group relative inline-flex items-center gap-2 rounded-md px-8 py-4 text-[13px] font-semibold uppercase tracking-[2px] transition-all hover:translate-y-[-2px] overflow-hidden"
-            style={{
-              background: `linear-gradient(135deg, ${C.bronzeLight}, ${C.bronze})`,
-              color: C.black,
-              boxShadow: `0 20px 50px -10px ${C.bronze}80, inset 0 1px 0 rgba(255,255,255,.25), 0 0 60px ${C.bronze}25`,
-            }}
-          >
-            <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{
-              background: `linear-gradient(120deg, transparent 30%, rgba(255,255,255,.4) 50%, transparent 70%)`,
-              animation: 'cfcShine 2s ease-in-out infinite',
+          {/* CTA Principal — pulsing rings (invitación) + liquid glass + chromatic shine */}
+          <span className="relative inline-flex">
+            {/* Doble ring pulsante: invita al clic sin agresividad */}
+            <span aria-hidden className="pointer-events-none absolute -inset-2 rounded-md" style={{
+              border: `1.5px solid ${C.bronze}55`,
+              animation: 'cfcRingPulse 2.4s ease-out infinite',
             }}/>
-            <span className="relative">Escríbenos hoy</span>
-            <svg className="relative" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </a>
+            <span aria-hidden className="pointer-events-none absolute -inset-1 rounded-md" style={{
+              border: `1.5px solid ${C.bronzeLight}40`,
+              animation: 'cfcRingPulse 2.4s ease-out .8s infinite',
+            }}/>
+            <a
+              href="mailto:contacto@capitalfounderconsulting.com?subject=Quiero%20agendar%20una%20consulta%20con%20Capital%20Founder"
+              className="group relative inline-flex items-center gap-2 rounded-md px-8 py-4 text-[13px] font-semibold uppercase tracking-[2px] transition-all hover:translate-y-[-2px] overflow-hidden"
+              style={{
+                background: `linear-gradient(135deg, ${C.bronzeLight}, ${C.bronze})`,
+                color: C.black,
+                boxShadow: `0 20px 50px -10px ${C.bronze}80, inset 0 1px 0 rgba(255,255,255,.25), 0 0 60px ${C.bronze}25`,
+              }}
+            >
+              <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{
+                background: `linear-gradient(120deg, transparent 30%, rgba(255,255,255,.4) 50%, transparent 70%)`,
+                animation: 'cfcShine 2s ease-in-out infinite',
+              }}/>
+              <span className="relative">Escríbenos hoy</span>
+              <svg className="relative" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </span>
 
           {/* WhatsApp con liquid glass */}
           <a
@@ -201,6 +212,11 @@ export function CtaFinal() {
         @keyframes cfcCtaFloat1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(40px,30px) scale(1.1); } }
         @keyframes cfcCtaFloat2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-50px,30px) scale(1.08); } }
         @keyframes cfcGradientShift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        @keyframes cfcRingPulse {
+          0%   { transform: scale(1);    opacity: .85; }
+          70%  { transform: scale(1.35); opacity: 0; }
+          100% { transform: scale(1.35); opacity: 0; }
+        }
       `}</style>
     </section>
   );

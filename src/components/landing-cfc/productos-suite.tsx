@@ -9,25 +9,45 @@ const COLORS_MAP = {
   tech: C.tech,
 };
 
-/* ═══ Mini-previews por producto ═══ */
-
-function PreviewSparkline({ color }: { color: string }) {
+/* ═══ Word-reveal con blur (estilo Hero) ═══ */
+function RevealWords({ text, startDelay = 0, stagger = 70, italic = false, gradient = false }: {
+  text: string;
+  startDelay?: number;
+  stagger?: number;
+  italic?: boolean;
+  gradient?: boolean;
+}) {
+  const words = text.split(' ');
   return (
-    <svg viewBox="0 0 100 30" className="w-full h-full" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id={`spark-${color.slice(1)}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity="0.5" />
-          <stop offset="100%" stopColor={color} stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <path d="M0,22 L15,18 L30,20 L45,12 L60,15 L75,8 L90,10 L100,4 L100,30 L0,30 Z" fill={`url(#spark-${color.slice(1)})`}/>
-      <path d="M0,22 L15,18 L30,20 L45,12 L60,15 L75,8 L90,10 L100,4" fill="none" stroke={color} strokeWidth="1" strokeLinecap="round" style={{ filter: `drop-shadow(0 0 2px ${color})` }}/>
-      <circle cx="100" cy="4" r="1.8" fill={color}>
-        <animate attributeName="r" values="1.8;3;1.8" dur="1.5s" repeatCount="indefinite" />
-      </circle>
-    </svg>
+    <>
+      {words.map((word, i) => (
+        <span
+          key={i}
+          className={`inline-block will-change-[transform,filter,opacity] ${italic ? 'italic' : ''}`}
+          style={{
+            opacity: 0,
+            transform: 'translateY(.4em)',
+            filter: 'blur(10px)',
+            animation: `cfcSuiteReveal .9s cubic-bezier(.16,1,.3,1) ${startDelay + i * stagger}ms forwards`,
+            ...(gradient
+              ? {
+                  color: 'transparent',
+                  backgroundImage: `linear-gradient(95deg, ${C.bronzeLight}, ${C.goldFoil}, ${C.bronze})`,
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                }
+              : { color: C.ivory }),
+          }}
+        >
+          {word}
+          {i < words.length - 1 && <span>&nbsp;</span>}
+        </span>
+      ))}
+    </>
   );
 }
+
+/* ═══ Mini-previews por producto ═══ */
 
 function PreviewKanban({ color }: { color: string }) {
   return (
@@ -159,6 +179,144 @@ const PREVIEWS_BY_NAME: Record<string, (props: { color: string }) => JSX.Element
   'Capital Command': PreviewCockpit,
 };
 
+/* ═══ Carrusel del mockup Capital CFO — 3 vistas auto-cycle ═══ */
+function CapitalCfoMockupCarousel() {
+  const [view, setView] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (paused) return;
+    const id = setInterval(() => setView((v) => (v + 1) % 3), 4200);
+    return () => clearInterval(id);
+  }, [paused]);
+
+  return (
+    <div
+      className="hidden md:block w-44 h-44 lg:w-52 lg:h-52 flex-shrink-0 rounded-2xl relative overflow-hidden"
+      style={{
+        background: `linear-gradient(135deg, ${C.bronze}25, ${C.bronze}05)`,
+        border: `1px solid ${C.bronze}35`,
+        boxShadow: `inset 0 1px 0 rgba(255,255,255,.06), inset 0 0 30px rgba(0,0,0,.4)`,
+      }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      {/* Header simulado siempre visible */}
+      <div className="absolute top-2 left-2 right-2 z-10 flex items-center gap-1">
+        <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#ef4444' }}/>
+        <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#eab308' }}/>
+        <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#22c55e' }}/>
+        <span className="ml-auto text-[7px] font-mono uppercase tracking-[1.5px]" style={{ color: C.bronzeLight, opacity: 0.7 }}>
+          {['CASHFLOW', 'KPIs', 'FORECAST'][view]}
+        </span>
+      </div>
+
+      {/* Vista 0 — Cashflow (sparkline area) */}
+      <svg className="absolute inset-x-3 top-7 bottom-6" viewBox="0 0 100 80" preserveAspectRatio="none" style={{
+        opacity: view === 0 ? 1 : 0,
+        transform: view === 0 ? 'scale(1)' : 'scale(1.04)',
+        transition: 'opacity .55s ease-in-out, transform .55s ease-in-out',
+      }}>
+        <defs>
+          <linearGradient id="cfoMini0" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={C.bronzeLight} stopOpacity="0.5"/>
+            <stop offset="100%" stopColor={C.bronze} stopOpacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d="M5,60 L20,52 L35,55 L50,38 L65,42 L80,22 L95,18 L95,80 L5,80 Z" fill="url(#cfoMini0)"/>
+        <path d="M5,60 L20,52 L35,55 L50,38 L65,42 L80,22 L95,18" fill="none" stroke={C.goldFoil} strokeWidth="1.5" strokeLinecap="round"/>
+        <circle cx="95" cy="18" r="2.5" fill={C.goldFoil}>
+          <animate attributeName="r" values="2.5;4;2.5" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <text x="8" y="13" fontSize="6" fontWeight="700" fill={C.bronzeLight} fontFamily="JetBrains Mono">+24%</text>
+      </svg>
+
+      {/* Vista 1 — KPI gauges */}
+      <svg className="absolute inset-x-3 top-7 bottom-6" viewBox="0 0 100 80" preserveAspectRatio="xMidYMid meet" style={{
+        opacity: view === 1 ? 1 : 0,
+        transform: view === 1 ? 'scale(1)' : 'scale(1.04)',
+        transition: 'opacity .55s ease-in-out, transform .55s ease-in-out',
+      }}>
+        {[
+          { cx: 22, cy: 30, label: 'CR', val: 78, color: C.bronzeLight },
+          { cx: 50, cy: 30, label: 'MR', val: 92, color: C.goldFoil },
+          { cx: 78, cy: 30, label: 'BR', val: 64, color: C.bronze },
+        ].map((g, i) => {
+          const circumference = 2 * Math.PI * 9;
+          const dashOffset = circumference - (g.val / 100) * circumference;
+          return (
+            <g key={i}>
+              <circle cx={g.cx} cy={g.cy} r="9" fill="none" stroke={`${g.color}33`} strokeWidth="2.2" />
+              <circle cx={g.cx} cy={g.cy} r="9" fill="none" stroke={g.color} strokeWidth="2.2"
+                strokeDasharray={circumference}
+                strokeDashoffset={dashOffset}
+                strokeLinecap="round"
+                transform={`rotate(-90 ${g.cx} ${g.cy})`}
+                style={{ filter: `drop-shadow(0 0 3px ${g.color})` }}
+              />
+              <text x={g.cx} y={g.cy + 1.5} textAnchor="middle" fontSize="5.5" fontWeight="700" fill={g.color} fontFamily="JetBrains Mono">{g.val}</text>
+              <text x={g.cx} y={g.cy + 18} textAnchor="middle" fontSize="4.5" fontWeight="600" fill={C.dim} fontFamily="JetBrains Mono">{g.label}</text>
+            </g>
+          );
+        })}
+        {/* mini status bar abajo */}
+        <line x1="10" y1="65" x2="90" y2="65" stroke={`${C.bronze}40`} strokeWidth="0.5" />
+        <line x1="10" y1="65" x2="68" y2="65" stroke={C.goldFoil} strokeWidth="1.2" strokeLinecap="round" style={{ filter: `drop-shadow(0 0 2px ${C.goldFoil})` }}/>
+        <text x="50" y="74" textAnchor="middle" fontSize="4.5" fontWeight="700" fill={C.bronzeLight} fontFamily="JetBrains Mono">EBITDA · 78%</text>
+      </svg>
+
+      {/* Vista 2 — Forecast (dual área) */}
+      <svg className="absolute inset-x-3 top-7 bottom-6" viewBox="0 0 100 80" preserveAspectRatio="none" style={{
+        opacity: view === 2 ? 1 : 0,
+        transform: view === 2 ? 'scale(1)' : 'scale(1.04)',
+        transition: 'opacity .55s ease-in-out, transform .55s ease-in-out',
+      }}>
+        <defs>
+          <linearGradient id="cfoFc1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={C.bronze} stopOpacity="0.5"/>
+            <stop offset="100%" stopColor={C.bronze} stopOpacity="0"/>
+          </linearGradient>
+          <linearGradient id="cfoFc2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={C.goldFoil} stopOpacity="0.4"/>
+            <stop offset="100%" stopColor={C.goldFoil} stopOpacity="0"/>
+          </linearGradient>
+        </defs>
+        {/* Real */}
+        <path d="M5,55 L20,48 L35,50 L50,42 L65,38 L65,80 L5,80 Z" fill="url(#cfoFc1)"/>
+        <path d="M5,55 L20,48 L35,50 L50,42 L65,38" fill="none" stroke={C.bronze} strokeWidth="1.4" strokeLinecap="round"/>
+        {/* Forecast (dashed) */}
+        <path d="M65,38 L80,28 L95,16" fill="none" stroke={C.goldFoil} strokeWidth="1.5" strokeLinecap="round" strokeDasharray="3,2.5"/>
+        <path d="M65,38 L80,28 L95,16 L95,80 L65,80 Z" fill="url(#cfoFc2)" opacity="0.6"/>
+        {/* divider vertical */}
+        <line x1="65" y1="14" x2="65" y2="76" stroke={C.bronze} strokeWidth="0.4" opacity="0.4" strokeDasharray="1,2"/>
+        <text x="40" y="13" fontSize="5" fontWeight="700" fill={C.muted} fontFamily="JetBrains Mono">REAL</text>
+        <text x="78" y="13" fontSize="5" fontWeight="700" fill={C.goldFoil} fontFamily="JetBrains Mono">+Q4E</text>
+        <circle cx="95" cy="16" r="2.5" fill={C.goldFoil}>
+          <animate attributeName="r" values="2.5;4;2.5" dur="2s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+
+      {/* Dots indicador */}
+      <div className="absolute bottom-2 left-0 right-0 z-10 flex items-center justify-center gap-1.5">
+        {[0, 1, 2].map((i) => (
+          <button
+            key={i}
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setView(i); }}
+            aria-label={`Vista ${i + 1}`}
+            className="rounded-full transition-all"
+            style={{
+              width: view === i ? 14 : 4,
+              height: 4,
+              background: view === i ? C.bronzeLight : `${C.bronze}55`,
+              transition: 'width .35s, background .35s',
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ═══ TiltCard ═══ */
 function TiltCard({ children, accent, className, disabled = false }: {
   children: React.ReactNode;
@@ -212,9 +370,19 @@ function TiltCard({ children, accent, className, disabled = false }: {
   );
 }
 
+/* ═══ Fan offsets para entrada teatral (relativos a cada grid spot) ═══ */
+// Curva en arco: cards entran desde abanico (arriba + lados) y aterrizan en sus posiciones de grid
+function fanOffsetFor(i: number, total: number) {
+  const t = total === 1 ? 0.5 : i / (total - 1);
+  const x = (t - 0.5) * 280;            // ±140px lateral
+  const yArc = -120 - (1 - Math.abs(t - 0.5) * 2) * 60; // arco: más abajo en extremos
+  const rotate = (t - 0.5) * 26;        // ±13°
+  return { x, y: yArc, rotate };
+}
+
 export function ProductosSuite() {
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [entered, setEntered] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
@@ -222,11 +390,11 @@ export function ProductosSuite() {
     const io = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          setVisible(true);
+          setEntered(true);
           io.disconnect();
         }
       },
-      { threshold: 0.15 },
+      { threshold: 0.18 },
     );
     io.observe(el);
     return () => io.disconnect();
@@ -244,6 +412,7 @@ export function ProductosSuite() {
         background: C.bg,
         borderTop: `1px solid ${C.border}`,
       }}
+      data-entered={entered ? 'true' : 'false'}
     >
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute w-[600px] h-[600px] rounded-full blur-[140px]" style={{
@@ -260,21 +429,41 @@ export function ProductosSuite() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
           <div className="max-w-2xl">
-            <p className="text-[10px] font-mono font-bold uppercase tracking-[3px] mb-4" style={{ color: C.bronze }}>
+            <p className="text-[10px] font-mono font-bold uppercase tracking-[3px] mb-4" style={{
+              color: C.bronze,
+              opacity: entered ? 1 : 0,
+              transition: 'opacity .7s cubic-bezier(.16,1,.3,1)',
+            }}>
               Suite de productos · Capital Founder
             </p>
             <h2 className="text-[clamp(32px,4.5vw,52px)] leading-[1.05] font-medium tracking-tight mb-5" style={{
-              color: C.ivory,
               fontFamily: "'Fraunces', Georgia, serif",
               letterSpacing: '-0.02em',
             }}>
-              Software propio que <span className="italic" style={{ color: C.bronzeLight }}>multiplica</span> nuestro impacto.
+              {entered && (
+                <>
+                  <RevealWords text="Software propio que" startDelay={50} stagger={70} />
+                  <span>&nbsp;</span>
+                  <RevealWords text="multiplica" startDelay={50 + 3 * 70} stagger={70} italic gradient />
+                  <span>&nbsp;</span>
+                  <RevealWords text="nuestro impacto." startDelay={50 + 4 * 70} stagger={70} />
+                </>
+              )}
             </h2>
-            <p className="text-[15px] leading-relaxed" style={{ color: C.muted }}>
+            <p className="text-[15px] leading-relaxed" style={{
+              color: C.muted,
+              opacity: entered ? 1 : 0,
+              transform: entered ? 'translateY(0)' : 'translateY(10px)',
+              transition: 'opacity .8s .55s cubic-bezier(.16,1,.3,1), transform .8s .55s cubic-bezier(.16,1,.3,1)',
+            }}>
               Cada producto resuelve un dolor real que vivimos como firma. Lo usamos internamente antes de venderlo. Capital CFO ya está en producción — el resto sale a lo largo del año.
             </p>
           </div>
-          <div className="flex-shrink-0 flex items-center gap-2 text-[10px] font-mono uppercase tracking-[2px]" style={{ color: C.dim }}>
+          <div className="flex-shrink-0 flex items-center gap-2 text-[10px] font-mono uppercase tracking-[2px]" style={{
+            color: C.dim,
+            opacity: entered ? 1 : 0,
+            transition: 'opacity .8s .8s cubic-bezier(.16,1,.3,1)',
+          }}>
             <span className="relative flex h-1.5 w-1.5">
               <span className="absolute inset-0 rounded-full animate-ping" style={{ background: C.bronze, opacity: 0.5 }}/>
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: C.bronze }}/>
@@ -283,14 +472,20 @@ export function ProductosSuite() {
           </div>
         </div>
 
-        {/* ═══ HERO CARD — Capital CFO — Amex metallic con tilt ═══ */}
+        {/* ═══ HERO CARD — Capital CFO emerge desde abajo ═══ */}
         <div
+          className="cfc-hero-enter"
           style={{
             perspective: '1400px',
-            opacity: visible ? 1 : 0,
-            transform: visible ? 'translateY(0)' : 'translateY(30px)',
-            transition: 'opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1)',
             marginBottom: 20,
+            // Estado inicial: levantado, escalado abajo
+            transform: entered
+              ? 'translateY(0) scale(1)'
+              : 'translateY(70px) scale(.94)',
+            opacity: entered ? 1 : 0,
+            filter: entered ? 'blur(0)' : 'blur(6px)',
+            transition:
+              'transform 1.2s cubic-bezier(.16,1,.3,1), opacity 1.2s cubic-bezier(.16,1,.3,1), filter 1.2s cubic-bezier(.16,1,.3,1)',
           }}
         >
           <TiltCard accent={C.bronze}>
@@ -363,40 +558,14 @@ export function ProductosSuite() {
                   </div>
                 </div>
 
-                {/* Visual mockup dashboard mini */}
-                <div className="hidden md:block w-44 h-44 lg:w-52 lg:h-52 flex-shrink-0 rounded-2xl relative overflow-hidden" style={{
-                  background: `linear-gradient(135deg, ${C.bronze}25, ${C.bronze}05)`,
-                  border: `1px solid ${C.bronze}35`,
-                  boxShadow: `inset 0 1px 0 rgba(255,255,255,.06), inset 0 0 30px rgba(0,0,0,.4)`,
-                }}>
-                  {/* Header simulado */}
-                  <div className="absolute top-2 left-2 right-2 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#ef4444' }}/>
-                    <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#eab308' }}/>
-                    <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#22c55e' }}/>
-                  </div>
-                  {/* Mini chart */}
-                  <svg className="absolute inset-x-3 top-7 bottom-3" viewBox="0 0 100 80" preserveAspectRatio="none">
-                    <defs>
-                      <linearGradient id="cfoMini" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor={C.bronzeLight} stopOpacity="0.5"/>
-                        <stop offset="100%" stopColor={C.bronze} stopOpacity="0"/>
-                      </linearGradient>
-                    </defs>
-                    <path d="M5,60 L20,52 L35,55 L50,38 L65,42 L80,22 L95,18 L95,80 L5,80 Z" fill="url(#cfoMini)"/>
-                    <path d="M5,60 L20,52 L35,55 L50,38 L65,42 L80,22 L95,18" fill="none" stroke={C.goldFoil} strokeWidth="1.5" strokeLinecap="round"/>
-                    <circle cx="95" cy="18" r="2.5" fill={C.goldFoil}>
-                      <animate attributeName="r" values="2.5;4;2.5" dur="2s" repeatCount="indefinite"/>
-                    </circle>
-                    <text x="8" y="13" fontSize="6" fontWeight="700" fill={C.bronzeLight} fontFamily="JetBrains Mono">+24%</text>
-                  </svg>
-                </div>
+                {/* Mini dashboard — carrusel 3 vistas */}
+                <CapitalCfoMockupCarousel />
               </div>
             </Link>
           </TiltCard>
         </div>
 
-        {/* ═══ GRID DE 7 PLACEHOLDERS — con tilt + previews ═══ */}
+        {/* ═══ GRID DE 7 PLACEHOLDERS — entrada teatral en abanico ═══ */}
         <div
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
           style={{ perspective: '1400px' }}
@@ -404,13 +573,22 @@ export function ProductosSuite() {
           {rest.map((p, i) => {
             const accent = COLORS_MAP[p.color];
             const Preview = PREVIEWS_BY_NAME[p.nombre];
+            const fan = fanOffsetFor(i, rest.length);
+            const delay = 600 + i * 110;
+
             return (
               <div
                 key={p.nombre}
+                className="cfc-card-enter"
                 style={{
-                  opacity: visible ? 1 : 0,
-                  transform: visible ? 'translateY(0)' : 'translateY(20px)',
-                  transition: `opacity .6s ${0.2 + i * 0.06}s cubic-bezier(.16,1,.3,1), transform .6s ${0.2 + i * 0.06}s cubic-bezier(.16,1,.3,1)`,
+                  // Estado inicial: posición de abanico relativa al grid spot
+                  transform: entered
+                    ? 'translate(0, 0) rotate(0deg) scale(1)'
+                    : `translate(${fan.x}px, ${fan.y}px) rotate(${fan.rotate}deg) scale(.86)`,
+                  opacity: entered ? 1 : 0,
+                  filter: entered ? 'blur(0)' : 'blur(6px)',
+                  transition: `transform .95s ${delay}ms cubic-bezier(.16,1,.3,1), opacity .95s ${delay}ms cubic-bezier(.16,1,.3,1), filter .95s ${delay}ms cubic-bezier(.16,1,.3,1)`,
+                  willChange: 'transform, opacity, filter',
                 }}
               >
                 <TiltCard accent={accent}>
@@ -487,16 +665,26 @@ export function ProductosSuite() {
         </div>
 
         {/* Roadmap label */}
-        <p className="mt-12 text-center text-[11px] font-mono italic uppercase tracking-[2px]" style={{ color: C.dim }}>
+        <p className="mt-12 text-center text-[11px] font-mono italic uppercase tracking-[2px]" style={{
+          color: C.dim,
+          opacity: entered ? 1 : 0,
+          transition: `opacity .8s ${600 + rest.length * 110 + 300}ms cubic-bezier(.16,1,.3,1)`,
+        }}>
           Roadmap 2026 · construyendo la firma del futuro
         </p>
       </div>
 
       <style jsx global>{`
+        @keyframes cfcSuiteReveal { to { opacity: 1; transform: translateY(0); filter: blur(0); } }
         @keyframes cfcPreviewIn { from { opacity: 0; transform: scaleX(0); transform-origin: left; } to { opacity: 1; transform: scaleX(1); } }
         @keyframes cfcDraw { to { stroke-dashoffset: 0; } }
         @keyframes cfcPeopleIn { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: translateX(0); } }
         @keyframes cfcBarUp { from { opacity: 0; transform: scaleY(0); } to { opacity: 1; transform: scaleY(1); } }
+        @media (prefers-reduced-motion: reduce) {
+          .cfc-hero-enter, .cfc-card-enter {
+            transform: none !important; opacity: 1 !important; filter: none !important; transition: none !important;
+          }
+        }
       `}</style>
     </section>
   );
