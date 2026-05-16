@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { HeroCFC } from '@/components/landing-cfc/hero-cfc';
+import { HeroWithCards } from '@/components/landing-cfc/hero-with-cards';
 import { ProblemaCFC } from '@/components/landing-cfc/problema-cfc';
 import { ServiciosEcosistema } from '@/components/landing-cfc/servicios-ecosistema';
 import { ProductosSuite } from '@/components/landing-cfc/productos-suite';
@@ -106,7 +106,7 @@ export default function CapitalFounderConsultingPage() {
       <ScrollIndicator />
 
       {/* ═══ SECCIONES ═══ */}
-      <HeroCFC />
+      <HeroWithCards />
       <ProblemaCFC />
       <ServiciosEcosistema />
       <ProductosSuite />

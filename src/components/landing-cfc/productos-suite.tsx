@@ -9,44 +9,6 @@ const COLORS_MAP = {
   tech: C.tech,
 };
 
-/* ═══ Word-reveal con blur (estilo Hero) ═══ */
-function RevealWords({ text, startDelay = 0, stagger = 70, italic = false, gradient = false }: {
-  text: string;
-  startDelay?: number;
-  stagger?: number;
-  italic?: boolean;
-  gradient?: boolean;
-}) {
-  const words = text.split(' ');
-  return (
-    <>
-      {words.map((word, i) => (
-        <span
-          key={i}
-          className={`inline-block will-change-[transform,filter,opacity] ${italic ? 'italic' : ''}`}
-          style={{
-            opacity: 0,
-            transform: 'translateY(.4em)',
-            filter: 'blur(10px)',
-            animation: `cfcSuiteReveal .9s cubic-bezier(.16,1,.3,1) ${startDelay + i * stagger}ms forwards`,
-            ...(gradient
-              ? {
-                  color: 'transparent',
-                  backgroundImage: `linear-gradient(95deg, ${C.bronzeLight}, ${C.goldFoil}, ${C.bronze})`,
-                  backgroundClip: 'text',
-                  WebkitBackgroundClip: 'text',
-                }
-              : { color: C.ivory }),
-          }}
-        >
-          {word}
-          {i < words.length - 1 && <span>&nbsp;</span>}
-        </span>
-      ))}
-    </>
-  );
-}
-
 /* ═══ Mini-previews por producto ═══ */
 
 function PreviewKanban({ color }: { color: string }) {
@@ -370,16 +332,6 @@ function TiltCard({ children, accent, className, disabled = false }: {
   );
 }
 
-/* ═══ Fan offsets para entrada teatral (relativos a cada grid spot) ═══ */
-// Curva en arco: cards entran desde abanico (arriba + lados) y aterrizan en sus posiciones de grid
-function fanOffsetFor(i: number, total: number) {
-  const t = total === 1 ? 0.5 : i / (total - 1);
-  const x = (t - 0.5) * 280;            // ±140px lateral
-  const yArc = -120 - (1 - Math.abs(t - 0.5) * 2) * 60; // arco: más abajo en extremos
-  const rotate = (t - 0.5) * 26;        // ±13°
-  return { x, y: yArc, rotate };
-}
-
 export function ProductosSuite() {
   const ref = useRef<HTMLDivElement>(null);
   const [entered, setEntered] = useState(false);
@@ -426,66 +378,46 @@ export function ProductosSuite() {
       </div>
 
       <div className="relative mx-auto max-w-[1400px]">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
+        {/* Header — más corto porque el mensaje principal ya se contó arriba en SuiteTransition */}
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
           <div className="max-w-2xl">
-            <p className="text-[10px] font-mono font-bold uppercase tracking-[3px] mb-4" style={{
+            <p className="text-[10px] font-mono font-bold uppercase tracking-[3px] mb-3" style={{
               color: C.bronze,
               opacity: entered ? 1 : 0,
               transition: 'opacity .7s cubic-bezier(.16,1,.3,1)',
             }}>
-              Suite de productos · Capital Founder
+              El detalle · 8 productos
             </p>
-            <h2 className="text-[clamp(32px,4.5vw,52px)] leading-[1.05] font-medium tracking-tight mb-5" style={{
-              fontFamily: "'Fraunces', Georgia, serif",
-              letterSpacing: '-0.02em',
-            }}>
-              {entered && (
-                <>
-                  <RevealWords text="Software propio que" startDelay={50} stagger={70} />
-                  <span>&nbsp;</span>
-                  <RevealWords text="multiplica" startDelay={50 + 3 * 70} stagger={70} italic gradient />
-                  <span>&nbsp;</span>
-                  <RevealWords text="nuestro impacto." startDelay={50 + 4 * 70} stagger={70} />
-                </>
-              )}
-            </h2>
             <p className="text-[15px] leading-relaxed" style={{
               color: C.muted,
               opacity: entered ? 1 : 0,
               transform: entered ? 'translateY(0)' : 'translateY(10px)',
-              transition: 'opacity .8s .55s cubic-bezier(.16,1,.3,1), transform .8s .55s cubic-bezier(.16,1,.3,1)',
+              transition: 'opacity .8s .15s cubic-bezier(.16,1,.3,1), transform .8s .15s cubic-bezier(.16,1,.3,1)',
             }}>
-              Cada producto resuelve un dolor real que vivimos como firma. Lo usamos internamente antes de venderlo. Capital CFO ya está en producción — el resto sale a lo largo del año.
+              Cada producto resuelve un dolor real que vivimos como firma. Capital CFO ya está en producción — el resto sale a lo largo del año.
             </p>
           </div>
           <div className="flex-shrink-0 flex items-center gap-2 text-[10px] font-mono uppercase tracking-[2px]" style={{
             color: C.dim,
             opacity: entered ? 1 : 0,
-            transition: 'opacity .8s .8s cubic-bezier(.16,1,.3,1)',
+            transition: 'opacity .8s .35s cubic-bezier(.16,1,.3,1)',
           }}>
             <span className="relative flex h-1.5 w-1.5">
               <span className="absolute inset-0 rounded-full animate-ping" style={{ background: C.bronze, opacity: 0.5 }}/>
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: C.bronze }}/>
             </span>
-            8 productos · 1 activo
+            1 activo · 7 próximamente
           </div>
         </div>
 
-        {/* ═══ HERO CARD — Capital CFO emerge desde abajo ═══ */}
+        {/* ═══ HERO CARD — Capital CFO Amex metallic con tilt ═══ */}
         <div
-          className="cfc-hero-enter"
           style={{
             perspective: '1400px',
             marginBottom: 20,
-            // Estado inicial: levantado, escalado abajo
-            transform: entered
-              ? 'translateY(0) scale(1)'
-              : 'translateY(70px) scale(.94)',
             opacity: entered ? 1 : 0,
-            filter: entered ? 'blur(0)' : 'blur(6px)',
-            transition:
-              'transform 1.2s cubic-bezier(.16,1,.3,1), opacity 1.2s cubic-bezier(.16,1,.3,1), filter 1.2s cubic-bezier(.16,1,.3,1)',
+            transform: entered ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1)',
           }}
         >
           <TiltCard accent={C.bronze}>
@@ -573,22 +505,14 @@ export function ProductosSuite() {
           {rest.map((p, i) => {
             const accent = COLORS_MAP[p.color];
             const Preview = PREVIEWS_BY_NAME[p.nombre];
-            const fan = fanOffsetFor(i, rest.length);
-            const delay = 600 + i * 110;
 
             return (
               <div
                 key={p.nombre}
-                className="cfc-card-enter"
                 style={{
-                  // Estado inicial: posición de abanico relativa al grid spot
-                  transform: entered
-                    ? 'translate(0, 0) rotate(0deg) scale(1)'
-                    : `translate(${fan.x}px, ${fan.y}px) rotate(${fan.rotate}deg) scale(.86)`,
                   opacity: entered ? 1 : 0,
-                  filter: entered ? 'blur(0)' : 'blur(6px)',
-                  transition: `transform .95s ${delay}ms cubic-bezier(.16,1,.3,1), opacity .95s ${delay}ms cubic-bezier(.16,1,.3,1), filter .95s ${delay}ms cubic-bezier(.16,1,.3,1)`,
-                  willChange: 'transform, opacity, filter',
+                  transform: entered ? 'translateY(0)' : 'translateY(20px)',
+                  transition: `opacity .6s ${0.15 + i * 0.06}s cubic-bezier(.16,1,.3,1), transform .6s ${0.15 + i * 0.06}s cubic-bezier(.16,1,.3,1)`,
                 }}
               >
                 <TiltCard accent={accent}>
@@ -680,11 +604,6 @@ export function ProductosSuite() {
         @keyframes cfcDraw { to { stroke-dashoffset: 0; } }
         @keyframes cfcPeopleIn { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: translateX(0); } }
         @keyframes cfcBarUp { from { opacity: 0; transform: scaleY(0); } to { opacity: 1; transform: scaleY(1); } }
-        @media (prefers-reduced-motion: reduce) {
-          .cfc-hero-enter, .cfc-card-enter {
-            transform: none !important; opacity: 1 !important; filter: none !important; transition: none !important;
-          }
-        }
       `}</style>
     </section>
   );
