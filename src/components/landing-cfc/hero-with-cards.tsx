@@ -60,29 +60,11 @@ function fanSlotFor(productIdx: number): number {
   return productIdx; // 4→4, 5→5, 6→6, 7→7
 }
 
-/* ─── CASCADE/ORBIT: diagonal en desktop · orbit elíptico en mobile (gira infinito) ─── */
-const MOBILE_ORBIT_RADIUS_X = 145;
-const MOBILE_ORBIT_RADIUS_Y = 46; // elipse aplastada (gira horizontalmente con perspectiva)
-const MOBILE_ORBIT_CENTER_Y_OFFSET = 30;
-
-function orbitPoseMobile(slotIdx: number, orbitTime: number) {
-  // Cada card ocupa una posición angular sobre el anillo
-  const angle = (slotIdx / 8) * Math.PI * 2 + orbitTime * 0.55; // 0.55 rad/seg
-  const cosA = Math.cos(angle);
-  return {
-    x: Math.sin(angle) * MOBILE_ORBIT_RADIUS_X,
-    y: cosA * MOBILE_ORBIT_RADIUS_Y + MOBILE_ORBIT_CENTER_Y_OFFSET,
-    rotate: -Math.sin(angle) * 6,        // leve tilt 3D
-    scale: 0.68 + ((cosA + 1) / 2) * 0.18, // 0.68-0.86 (cerca = grande, lejos = chica)
-    // z: cards "al frente" (cosA cerca de 1) sobre las demás
-    z: Math.round(((cosA + 1) / 2) * 12),
-  };
-}
-
+/* ─── CASCADE desktop: diagonal a la derecha ─── */
 function cascadeFor(slotIdx: number, isMobile: boolean) {
   if (isMobile) {
-    // Mobile: pose inicial del orbit (sin tiempo, será la posición de aterrizaje al final del scroll)
-    return { ...orbitPoseMobile(slotIdx, 0) };
+    // Mobile usa flujo separado (slide left). Devuelve fan pose como fallback.
+    return { x: 0, y: 0, rotate: 0, scale: 0.85, z: 1 };
   }
   return {
     x: -130 + slotIdx * 65,
@@ -90,6 +72,102 @@ function cascadeFor(slotIdx: number, isMobile: boolean) {
     rotate: -8 + slotIdx * 2.4,
     scale: 0.85,
     z: 8 - slotIdx,
+  };
+}
+
+/* ─── MOBILE: flujo FAN → STACK → EXIT LEFT → HIDDEN → ENTER LEFT → FAN FINAL ───
+   Fases definidas sobre scrollProgress directo (0-1) para cubrir todo el container.
+   - 0   → 0.30: FAN inicial (Hero, headline "Decisiones que hacen crecer")
+   - 0.30 → 0.42: RETRACT (cierre del Hero)
+   - 0.42 → 0.55: EXIT LEFT (entrando a Suite Transition)
+   - 0.55 → 0.80: HIDDEN — headline "Software propio que multiplica" se lee LIMPIO
+   - 0.80 → 0.92: ENTER LEFT (regreso, final Suite Transition)
+   - 0.92 → 1.00: EXPAND FINAL (FAN al centro)                                 */
+const MOBILE_STAGES = {
+  fanEnd: 0.30,
+  retractEnd: 0.42,
+  exitEnd: 0.55,
+  hiddenEnd: 0.80,
+  enterEnd: 0.92,
+  expandEnd: 1.00,
+};
+
+function mobileScrollPose(
+  productIdx: number,
+  slot: number,
+  progress: number,
+  _lockProgress: number,
+  viewportW: number,
+): { pose: Pose; opacity: number } {
+  const fan = FAN_MOBILE[slot];
+  const stack: Pose = { x: 0, y: -10, rotate: 0, scale: 0.88 };
+  // Offscreen left: bien afuera del viewport, rotado
+  const offscreenLeft: Pose = { x: -viewportW * 0.8 - 80, y: -10, rotate: -14, scale: 0.74 };
+
+  const p = clamp(progress, 0, 1);
+  const S = MOBILE_STAGES;
+
+  if (p <= S.fanEnd) {
+    return { pose: fan, opacity: 1 };
+  }
+  if (p <= S.retractEnd) {
+    const t = smooth((p - S.fanEnd) / (S.retractEnd - S.fanEnd));
+    return {
+      pose: {
+        x: lerp(fan.x, stack.x, t),
+        y: lerp(fan.y, stack.y, t),
+        rotate: lerp(fan.rotate, stack.rotate, t),
+        scale: lerp(fan.scale, stack.scale, t),
+      },
+      opacity: 1,
+    };
+  }
+  if (p <= S.exitEnd) {
+    // Stack se "tira" hacia la izquierda con leve rotación
+    const tt = (p - S.retractEnd) / (S.exitEnd - S.retractEnd);
+    // Curva más agresiva al final para que parezca un swipe
+    const t = tt * tt * (3 - 2 * tt); // smoothstep
+    return {
+      pose: {
+        x: lerp(stack.x, offscreenLeft.x, t),
+        y: lerp(stack.y, offscreenLeft.y, t),
+        rotate: lerp(stack.rotate, offscreenLeft.rotate, t),
+        scale: lerp(stack.scale, offscreenLeft.scale, t),
+      },
+      opacity: lerp(1, 0.0, t),
+    };
+  }
+  if (p <= S.hiddenEnd) {
+    // Cards fuera, opacity 0 — headline limpio
+    return { pose: offscreenLeft, opacity: 0 };
+  }
+  if (p <= S.enterEnd) {
+    // ENTER LEFT con stagger: las primeras cards (slot bajo) llegan primero
+    const tt = (p - S.hiddenEnd) / (S.enterEnd - S.hiddenEnd);
+    // Stagger por slot: 0.10s entre cards (proporcional al rango)
+    const staggerOffset = (productIdx === 0 ? 0 : slot) * 0.08;
+    const localT = clamp((tt - staggerOffset) / (1 - staggerOffset), 0, 1);
+    const t = smooth(localT);
+    return {
+      pose: {
+        x: lerp(offscreenLeft.x, stack.x, t),
+        y: lerp(offscreenLeft.y, stack.y, t),
+        rotate: lerp(offscreenLeft.rotate, stack.rotate, t),
+        scale: lerp(offscreenLeft.scale, stack.scale, t),
+      },
+      opacity: t,
+    };
+  }
+  // EXPAND FINAL: stack → FAN
+  const t = smooth((p - S.enterEnd) / (S.expandEnd - S.enterEnd));
+  return {
+    pose: {
+      x: lerp(stack.x, fan.x, t),
+      y: lerp(stack.y, fan.y, t),
+      rotate: lerp(stack.rotate, fan.rotate, t),
+      scale: lerp(stack.scale, fan.scale, t),
+    },
+    opacity: 1,
   };
 }
 
@@ -106,10 +184,11 @@ interface Pose { x: number; y: number; rotate: number; scale: number; }
 
 function getScrollPose(productIdx: number, progress: number, lockProgress: number, isMobile: boolean): Pose {
   const slot = fanSlotFor(productIdx);
-  const FAN = isMobile ? FAN_MOBILE : FAN_DESKTOP;
+  // Desktop: fan → stack → cascade (sin cambios)
+  const FAN = FAN_DESKTOP;
   const fan = FAN[slot];
   const cascade = cascadeFor(slot, isMobile);
-  const stack: Pose = { x: 0, y: -10, rotate: 0, scale: isMobile ? 0.88 : 1 };
+  const stack: Pose = { x: 0, y: -10, rotate: 0, scale: 1 };
 
   const lp = Math.max(lockProgress, 0.1);
   const p1 = lp * 0.35;
@@ -372,7 +451,6 @@ export function HeroWithCards() {
   const [introDone, setIntroDone] = useState(false);
   const [mouse, setMouse] = useState({ x: 0.5, y: 0.5 });
   const [isMobile, setIsMobile] = useState(false);
-  const [orbitT, setOrbitT] = useState(0);
 
   /* Mobile detect */
   useEffect(() => {
@@ -456,23 +534,6 @@ export function HeroWithCards() {
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, []);
-
-  /* Orbit infinito — solo mobile, arranca cuando la coreografía está al final del scroll */
-  useEffect(() => {
-    if (!isMobile) return;
-    const lp = Math.max(lockProgress, 0.1);
-    const orbitFloor = lp * 0.70; // mientras transita FAN→ORBIT, ya estamos sumando tiempo (transición fluida)
-    if (scrollProgress < orbitFloor) return;
-    let raf = 0;
-    const start = performance.now() - orbitT * 1000;
-    function tick(now: number) {
-      setOrbitT((now - start) / 1000);
-      raf = requestAnimationFrame(tick);
-    }
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMobile, scrollProgress >= (Math.max(lockProgress, 0.1) * 0.70)]);
 
   /* Mouse parallax (Hero) — desactivado en mobile (no hay mouse + ahorra perf) */
   useEffect(() => {
@@ -695,8 +756,14 @@ export function HeroWithCards() {
           let pose: Pose;
           let opacity = 1;
 
+          const slot = fanSlotFor(i);
           if (!introDone) {
             const r = getIntroPose(i, introT, isMobile);
+            pose = r.pose;
+            opacity = r.opacity;
+          } else if (isMobile) {
+            // Mobile: flujo slide-left con headline limpio en mid
+            const r = mobileScrollPose(i, slot, scrollProgress, lockProgress, viewport.w);
             pose = r.pose;
             opacity = r.opacity;
           } else {
@@ -705,33 +772,14 @@ export function HeroWithCards() {
 
           const lp = Math.max(lockProgress, 0.1);
           const cascadeBlend = clamp((scrollProgress - lp * 0.70) / (lp - lp * 0.70), 0, 1);
+          // Mobile: anchor siempre al centro (las cards se mueven con x/y, no con anchor)
           const cascadeAnchorX = isMobile ? viewport.w * 0.50 : viewport.w * 0.68;
-          const cascadeAnchorY = viewport.h * (isMobile ? 0.72 : 0.55);
-          const anchorX = lerp(centerX, cascadeAnchorX, smooth(cascadeBlend));
-          const anchorY = lerp(heroFanY, cascadeAnchorY, smooth(cascadeBlend));
+          const cascadeAnchorY = viewport.h * (isMobile ? 0.66 : 0.55);
+          const anchorX = isMobile ? centerX : lerp(centerX, cascadeAnchorX, smooth(cascadeBlend));
+          const anchorY = isMobile ? viewport.h * 0.72 : lerp(heroFanY, cascadeAnchorY, smooth(cascadeBlend));
 
-          const slot = fanSlotFor(i);
           const FAN = isMobile ? FAN_MOBILE : FAN_DESKTOP;
           let zIdx: number = isLead ? 20 : FAN[slot].z + 5;
-
-          // ─── ORBIT mobile: cuando entramos a la fase de cascade, las cards orbitan ──
-          // El orbitT corre continuamente, y vamos crossfading desde el cascade
-          // estático (orbit en t=0) hacia el orbit animado (orbit en tiempo).
-          if (isMobile && introDone) {
-            const orbitMix = cascadeBlend; // 0..1 (encaja con la fase final del scroll)
-            if (orbitMix > 0) {
-              const live = orbitPoseMobile(slot, orbitT);
-              pose = {
-                x: lerp(pose.x, live.x, orbitMix),
-                y: lerp(pose.y, live.y, orbitMix),
-                rotate: lerp(pose.rotate, live.rotate, orbitMix),
-                scale: lerp(pose.scale, live.scale, orbitMix),
-              };
-              // Z dinámico: cards "al frente" del orbit van arriba
-              zIdx = Math.round(lerp(zIdx, live.z, orbitMix));
-              if (isLead) zIdx += 8;
-            }
-          }
 
           return (
             <div
