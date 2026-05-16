@@ -25,16 +25,28 @@ const COLORS_MAP: Record<string, string> = {
   tech: C.tech,
 };
 
-/* ─── FAN: 8 slots de izquierda a derecha ─── */
-const FAN: { x: number; y: number; rotate: number; scale: number; z: number }[] = [
-  { x: -540, y: 32,  rotate: -22, scale: 0.82, z: 1 }, // 0 leftmost
+/* ─── FAN desktop: 8 slots amplios ─── */
+const FAN_DESKTOP: { x: number; y: number; rotate: number; scale: number; z: number }[] = [
+  { x: -540, y: 32,  rotate: -22, scale: 0.82, z: 1 },
   { x: -380, y: 14,  rotate: -14, scale: 0.88, z: 2 },
   { x: -220, y: 2,   rotate: -7,  scale: 0.94, z: 3 },
-  { x:  -60, y: -8,  rotate: -2,  scale: 1.00, z: 5 }, // 3 = LEAD slot (Capital CFO)
+  { x:  -60, y: -8,  rotate: -2,  scale: 1.00, z: 5 }, // LEAD
   { x:  100, y: -8,  rotate:  2,  scale: 0.99, z: 4 },
   { x:  260, y: 2,   rotate:  7,  scale: 0.94, z: 3 },
   { x:  420, y: 14,  rotate: 14,  scale: 0.88, z: 2 },
-  { x:  580, y: 32,  rotate: 22,  scale: 0.82, z: 1 }, // 7 rightmost
+  { x:  580, y: 32,  rotate: 22,  scale: 0.82, z: 1 },
+];
+
+/* ─── FAN mobile: mismo abanico compactado para portrait ─── */
+const FAN_MOBILE: { x: number; y: number; rotate: number; scale: number; z: number }[] = [
+  { x: -128, y: 28, rotate: -22, scale: 0.82, z: 1 },
+  { x:  -92, y: 12, rotate: -14, scale: 0.86, z: 2 },
+  { x:  -56, y: 2,  rotate: -7,  scale: 0.90, z: 3 },
+  { x:  -14, y: -6, rotate: -2,  scale: 0.96, z: 5 }, // LEAD
+  { x:   28, y: -6, rotate:  2,  scale: 0.95, z: 4 },
+  { x:   64, y: 2,  rotate:  7,  scale: 0.90, z: 3 },
+  { x:  100, y: 12, rotate: 14,  scale: 0.86, z: 2 },
+  { x:  128, y: 28, rotate: 22,  scale: 0.82, z: 1 },
 ];
 
 const LEAD_SLOT = 3;
@@ -48,29 +60,45 @@ function fanSlotFor(productIdx: number): number {
   return productIdx; // 4→4, 5→5, 6→6, 7→7
 }
 
-/* ─── CASCADE: 8 escalones diagonales ─── */
-function cascadeFor(slotIdx: number) {
-  // Diagonal de arriba-izq a abajo-der, anclada al lado derecho de la suite section
+/* ─── CASCADE: diagonal desktop · pila vertical compacta en mobile (debajo del headline) ─── */
+function cascadeFor(slotIdx: number, isMobile: boolean) {
+  if (isMobile) {
+    // Mobile: cards apiladas verticalmente con leve diagonal hacia la derecha.
+    // Rango y reducido (~330px) para caber bajo el headline; ancla más abajo.
+    return {
+      x: -50 + slotIdx * 16,    // rango -50 a +62 (centrado, leve drift derecho)
+      y: -165 + slotIdx * 47,   // rango -165 a +164 (compacto vertical, cabe lower-half)
+      rotate: -5 + slotIdx * 1.4,
+      scale: 0.74,
+      z: 8 - slotIdx,
+    };
+  }
   return {
-    x: -60 + slotIdx * 75,
-    y: -200 + slotIdx * 50,
+    x: -130 + slotIdx * 65,
+    y: -240 + slotIdx * 68,
     rotate: -8 + slotIdx * 2.4,
-    scale: 0.86,
+    scale: 0.85,
     z: 8 - slotIdx,
   };
 }
 
-const CARD_W = 210;
-const CARD_H = 260;
-const HERO_FAN_Y_RATIO = 0.82; // 82% del viewport — cards quedan en la mitad inferior, no tapan el headline
+// Dimensiones card (px) — desktop · mobile
+const CARD_W_DESKTOP = 200;
+const CARD_H_DESKTOP = 248;
+const CARD_W_MOBILE = 132;
+const CARD_H_MOBILE = 168;
+
+const HERO_FAN_Y_RATIO_DESKTOP = 0.82;
+const HERO_FAN_Y_RATIO_MOBILE = 0.74; // mobile: cards bajo el headline + CTAs
 
 interface Pose { x: number; y: number; rotate: number; scale: number; }
 
-function getScrollPose(productIdx: number, progress: number, lockProgress: number): Pose {
+function getScrollPose(productIdx: number, progress: number, lockProgress: number, isMobile: boolean): Pose {
   const slot = fanSlotFor(productIdx);
+  const FAN = isMobile ? FAN_MOBILE : FAN_DESKTOP;
   const fan = FAN[slot];
-  const cascade = cascadeFor(slot);
-  const stack: Pose = { x: 0, y: -10, rotate: 0, scale: 1 };
+  const cascade = cascadeFor(slot, isMobile);
+  const stack: Pose = { x: 0, y: -10, rotate: 0, scale: isMobile ? 0.88 : 1 };
 
   const lp = Math.max(lockProgress, 0.1);
   const p1 = lp * 0.35;
@@ -106,8 +134,9 @@ const INTRO_T = {
   sweepEnd: 1.00,    // 0.43 → 1.00 sweep left a slot LEAD
 };
 
-function getIntroPose(productIdx: number, introT: number): { pose: Pose; opacity: number } {
+function getIntroPose(productIdx: number, introT: number, isMobile: boolean): { pose: Pose; opacity: number } {
   const slot = fanSlotFor(productIdx);
+  const FAN = isMobile ? FAN_MOBILE : FAN_DESKTOP;
   const fan = FAN[slot];
 
   if (productIdx === 0) {
@@ -115,7 +144,7 @@ function getIntroPose(productIdx: number, introT: number): { pose: Pose; opacity
     if (introT <= INTRO_T.emergeEnd) {
       const t = smooth(introT / INTRO_T.emergeEnd);
       return {
-        pose: { x: 0, y: lerp(220, 0, t), rotate: 0, scale: lerp(0.3, 1, t) },
+        pose: { x: 0, y: lerp(220, 0, t), rotate: 0, scale: lerp(0.3, isMobile ? 0.96 : 1, t) },
         opacity: t,
       };
     }
@@ -127,7 +156,7 @@ function getIntroPose(productIdx: number, introT: number): { pose: Pose; opacity
           x: lerp(0, target.x, t),
           y: lerp(0, target.y, t),
           rotate: lerp(0, target.rotate, t),
-          scale: lerp(1, target.scale, t),
+          scale: lerp(isMobile ? 0.96 : 1, target.scale, t),
         },
         opacity: 1,
       };
@@ -170,24 +199,29 @@ function getIntroPose(productIdx: number, introT: number): { pose: Pose; opacity
 }
 
 /* ═══════════ CARD VISUAL ═══════════ */
-function CardVisual({ product, accent, isLead, orderNum }: {
+function CardVisual({ product, accent, isLead, orderNum, isMobile }: {
   product: typeof PRODUCTOS[number];
   accent: string;
   isLead: boolean;
   orderNum: number;
+  isMobile: boolean;
 }) {
-  const Preview = null; // mantenemos cards limpias en la coreografía
   return (
     <div
       className="relative w-full h-full rounded-2xl overflow-hidden"
       style={{
         background: isLead
-          ? `linear-gradient(135deg, #1a1108 0%, #0a0705 50%, #1a1108 100%)`
-          : `linear-gradient(180deg, #2a201a 0%, #1a1310 100%)`,
-        border: `1.5px solid ${isLead ? `${C.bronze}c0` : `${accent}`}`,
+          ? `linear-gradient(135deg, #2a1d12 0%, #0d0805 50%, #2a1d12 100%)`
+          : isMobile
+            // Mobile próximamente: tinte de pilar visible — bg cálido con accent infusion
+            ? `linear-gradient(170deg, ${accent}22 0%, #2a1f15 60%, #18120e 100%)`
+            : `linear-gradient(180deg, #322519 0%, #1f1814 100%)`,
+        borderStyle: 'solid',
+        borderWidth: isMobile ? '2px' : '2px',
+        borderColor: isLead ? `${C.bronze}d0` : accent,
         boxShadow: isLead
-          ? `0 1px 0 rgba(255,255,255,.08) inset, 0 -1px 0 rgba(0,0,0,.6) inset, 0 30px 60px -20px rgba(0,0,0,.95), 0 0 60px ${C.bronze}50`
-          : `0 1px 0 rgba(255,255,255,.08) inset, 0 24px 50px -18px rgba(0,0,0,.95), 0 0 40px ${accent}55`,
+          ? `0 1px 0 rgba(255,255,255,.10) inset, 0 -1px 0 rgba(0,0,0,.6) inset, 0 30px 60px -20px rgba(0,0,0,.95), 0 0 ${isMobile ? 60 : 80}px ${C.bronze}${isMobile ? '99' : '66'}`
+          : `0 0 0 1px ${accent}88 inset, 0 1px 0 rgba(255,255,255,.2) inset, 0 16px 40px -14px rgba(0,0,0,.95), 0 0 ${isMobile ? 50 : 50}px ${accent}${isMobile ? 'cc' : '70'}`,
         backdropFilter: 'blur(14px)',
       }}
     >
@@ -321,6 +355,17 @@ export function HeroWithCards() {
   const [introT, setIntroT] = useState(0);
   const [introDone, setIntroDone] = useState(false);
   const [mouse, setMouse] = useState({ x: 0.5, y: 0.5 });
+  const [isMobile, setIsMobile] = useState(false);
+
+  /* Mobile detect */
+  useEffect(() => {
+    function check() {
+      setIsMobile(window.innerWidth < 1024); // lg breakpoint — choreography needs space
+    }
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   /* Measurement */
   useEffect(() => {
@@ -397,9 +442,13 @@ export function HeroWithCards() {
     return () => window.removeEventListener('mousemove', handle);
   }, []);
 
-  const isLocked = scrollProgress >= lockProgress;
-  const heroFanY = viewport.h * HERO_FAN_Y_RATIO;
+  // Las cards deben acompañar TODO el scroll del container (Hero + Suite Transition).
+  // Solo se "sueltan" cuando el container termina (progress = 1), no antes.
+  const isLocked = scrollProgress >= 1;
+  const heroFanY = viewport.h * (isMobile ? HERO_FAN_Y_RATIO_MOBILE : HERO_FAN_Y_RATIO_DESKTOP);
   const centerX = viewport.w / 2;
+  const CARD_W = isMobile ? CARD_W_MOBILE : CARD_W_DESKTOP;
+  const CARD_H = isMobile ? CARD_H_MOBILE : CARD_H_DESKTOP;
 
   /* Constelación dots */
   const dots = [
@@ -523,18 +572,18 @@ export function HeroWithCards() {
             </a>
           </div>
 
-          {/* Spacer para que las cards en FAN tengan espacio visual debajo del headline */}
-          <div style={{ height: 'min(420px, 46vh)' }} aria-hidden />
+          {/* Spacer para que las cards en FAN tengan espacio visual bajo el headline */}
+          <div style={{ height: isMobile ? 'min(260px, 32vh)' : 'min(420px, 46vh)' }} aria-hidden />
         </div>
       </section>
 
-      {/* ═══ Suite Transition Section ═══ */}
+      {/* ═══ Suite Transition Section — 200vh mobile · 170vh desktop ═══ */}
       <section
         data-section="suite-transition"
         className="relative px-6 md:px-12 lg:px-20"
-        style={{ minHeight: '170vh' }}
+        style={{ minHeight: isMobile ? '200vh' : '170vh' }}
       >
-        <div className="sticky top-0 h-screen flex items-center">
+        <div className="sticky top-0 h-screen flex items-start lg:items-center pt-12 lg:pt-0">
           <div className="relative mx-auto max-w-[1400px] w-full grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-10 lg:gap-16 items-center">
             <div>
               <p className="text-[10px] font-mono font-bold uppercase tracking-[3px] mb-4" style={{ color: C.bronze }}>
@@ -567,18 +616,18 @@ export function HeroWithCards() {
                 8 productos · 1 activo · Roadmap 2026
               </div>
             </div>
-            {/* Espacio reservado para la cascada de cards a la derecha */}
-            <div className="relative h-[560px]" aria-hidden />
+            {/* Espacio reservado para la cascada de cards (desktop) */}
+            {!isMobile && <div className="relative h-[560px]" aria-hidden />}
           </div>
         </div>
       </section>
 
-      {/* ═══ Cards overlay global ═══ */}
+      {/* ═══ Cards overlay global — misma coreografía en desktop y mobile ═══ */}
       <div
         className="pointer-events-none"
         style={{
           position: isLocked ? 'absolute' : 'fixed',
-          top: isLocked ? lockProgress * scrollableHeight : 0,
+          top: isLocked ? scrollableHeight : 0,
           left: 0,
           width: '100%',
           height: viewport.h,
@@ -593,23 +642,25 @@ export function HeroWithCards() {
           let opacity = 1;
 
           if (!introDone) {
-            const r = getIntroPose(i, introT);
+            const r = getIntroPose(i, introT, isMobile);
             pose = r.pose;
             opacity = r.opacity;
           } else {
-            pose = getScrollPose(i, scrollProgress, lockProgress);
+            pose = getScrollPose(i, scrollProgress, lockProgress, isMobile);
           }
 
-          // Anchor: durante FAN/STACK ancla al centro del viewport; durante CASCADE
-          // se mueve al lado derecho del viewport (donde está visualmente la zona derecha del Suite)
+          // Anchor: durante FAN/STACK ancla al centro; durante CASCADE se mueve.
+          // Desktop: cascada va a la derecha (sale del headline izquierdo).
+          // Mobile: cascada centrada horizontal pero DEBAJO del headline (anclaje y=72%).
           const lp = Math.max(lockProgress, 0.1);
           const cascadeBlend = clamp((scrollProgress - lp * 0.70) / (lp - lp * 0.70), 0, 1);
-          const cascadeAnchorX = viewport.w * 0.72;
-          const cascadeAnchorY = viewport.h * 0.50;
+          const cascadeAnchorX = isMobile ? viewport.w * 0.50 : viewport.w * 0.68;
+          const cascadeAnchorY = viewport.h * (isMobile ? 0.72 : 0.55);
           const anchorX = lerp(centerX, cascadeAnchorX, smooth(cascadeBlend));
           const anchorY = lerp(heroFanY, cascadeAnchorY, smooth(cascadeBlend));
 
           const slot = fanSlotFor(i);
+          const FAN = isMobile ? FAN_MOBILE : FAN_DESKTOP;
           const zIdx = isLead ? 20 : FAN[slot].z + 5;
 
           return (
@@ -629,7 +680,7 @@ export function HeroWithCards() {
                 zIndex: zIdx,
               }}
             >
-              <CardVisual product={p} accent={accent} isLead={isLead} orderNum={i + 1} />
+              <CardVisual product={p} accent={accent} isLead={isLead} orderNum={i + 1} isMobile={isMobile} />
             </div>
           );
         })}
