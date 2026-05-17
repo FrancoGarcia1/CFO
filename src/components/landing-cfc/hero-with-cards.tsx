@@ -75,21 +75,17 @@ function cascadeFor(slotIdx: number, isMobile: boolean) {
   };
 }
 
-/* ─── MOBILE: flujo FAN → STACK → EXIT LEFT → HIDDEN → ENTER LEFT → FAN FINAL ───
-   Fases definidas sobre scrollProgress directo (0-1) para cubrir todo el container.
-   - 0   → 0.30: FAN inicial (Hero, headline "Decisiones que hacen crecer")
-   - 0.30 → 0.42: RETRACT (cierre del Hero)
-   - 0.42 → 0.55: EXIT LEFT (entrando a Suite Transition)
-   - 0.55 → 0.80: HIDDEN — headline "Software propio que multiplica" se lee LIMPIO
-   - 0.80 → 0.92: ENTER LEFT (regreso, final Suite Transition)
-   - 0.92 → 1.00: EXPAND FINAL (FAN al centro)                                 */
+/* ─── MOBILE: "El portafolio del consultor" ─────────────────────────────────
+   Metáfora: el consultor ordena su portafolio sobre la mesa.
+   - 0    → 0.25: FAN inicial (8 cards en abanico bajo el headline Hero)
+   - 0.25 → 0.58: ORGANIZE — Capital CFO se eleva como destacada al centro-
+     derecha; las 7 próximamente se recogen en un mazo compacto bottom-left.
+     Cards laterales se mueven primero (efecto viento), centro al final.
+   - 0.58 → 1.00: STEADY — Capital CFO visible permanente, mazo apilado en
+     esquina (idle breathing sutil con rotación leve).                         */
 const MOBILE_STAGES = {
-  fanEnd: 0.30,
-  retractEnd: 0.42,
-  exitEnd: 0.55,
-  hiddenEnd: 0.80,
-  enterEnd: 0.92,
-  expandEnd: 1.00,
+  fanEnd: 0.25,
+  organizeEnd: 0.58,
 };
 
 function mobileScrollPose(
@@ -97,78 +93,70 @@ function mobileScrollPose(
   slot: number,
   progress: number,
   _lockProgress: number,
-  viewportW: number,
+  _viewportW: number,
 ): { pose: Pose; opacity: number } {
   const fan = FAN_MOBILE[slot];
-  const stack: Pose = { x: 0, y: -10, rotate: 0, scale: 0.88 };
-  // Offscreen left: bien afuera del viewport, rotado
-  const offscreenLeft: Pose = { x: -viewportW * 0.8 - 80, y: -10, rotate: -14, scale: 0.74 };
-
+  const isLead = productIdx === 0;
   const p = clamp(progress, 0, 1);
   const S = MOBILE_STAGES;
+
+  // ─── Capital CFO destacada: arriba-derecha, scale 1.0, leve tilt elegante ───
+  const featuredCFO: Pose = { x: 88, y: -180, rotate: -2, scale: 1.02 };
+
+  // ─── Stack próximamente: bottom-left compacto, micro-offsets por card ───
+  // slot 0,1,2 (izquierda del fan) y 4,5,6,7 (derecha) → mapeo a stackIdx 0-6
+  const stackIdx = slot < 3 ? slot : slot - 1;
+  const stackBottomLeft: Pose = {
+    x: -118 + stackIdx * 1.6,
+    y: 178 - stackIdx * 1.2,
+    rotate: -12 + stackIdx * 0.6,
+    scale: 0.48,
+  };
 
   if (p <= S.fanEnd) {
     return { pose: fan, opacity: 1 };
   }
-  if (p <= S.retractEnd) {
-    const t = smooth((p - S.fanEnd) / (S.retractEnd - S.fanEnd));
-    return {
-      pose: {
-        x: lerp(fan.x, stack.x, t),
-        y: lerp(fan.y, stack.y, t),
-        rotate: lerp(fan.rotate, stack.rotate, t),
-        scale: lerp(fan.scale, stack.scale, t),
-      },
-      opacity: 1,
-    };
-  }
-  if (p <= S.exitEnd) {
-    // Stack se "tira" hacia la izquierda con leve rotación
-    const tt = (p - S.retractEnd) / (S.exitEnd - S.retractEnd);
-    // Curva más agresiva al final para que parezca un swipe
-    const t = tt * tt * (3 - 2 * tt); // smoothstep
-    return {
-      pose: {
-        x: lerp(stack.x, offscreenLeft.x, t),
-        y: lerp(stack.y, offscreenLeft.y, t),
-        rotate: lerp(stack.rotate, offscreenLeft.rotate, t),
-        scale: lerp(stack.scale, offscreenLeft.scale, t),
-      },
-      opacity: lerp(1, 0.0, t),
-    };
-  }
-  if (p <= S.hiddenEnd) {
-    // Cards fuera, opacity 0 — headline limpio
-    return { pose: offscreenLeft, opacity: 0 };
-  }
-  if (p <= S.enterEnd) {
-    // ENTER LEFT con stagger: las primeras cards (slot bajo) llegan primero
-    const tt = (p - S.hiddenEnd) / (S.enterEnd - S.hiddenEnd);
-    // Stagger por slot: 0.10s entre cards (proporcional al rango)
-    const staggerOffset = (productIdx === 0 ? 0 : slot) * 0.08;
-    const localT = clamp((tt - staggerOffset) / (1 - staggerOffset), 0, 1);
+
+  if (p <= S.organizeEnd) {
+    const tt = (p - S.fanEnd) / (S.organizeEnd - S.fanEnd);
+
+    if (isLead) {
+      // Lead se mueve tardío y elegante (curve smooth + delay corto)
+      const localT = clamp((tt - 0.15) / 0.85, 0, 1);
+      const t = smooth(localT);
+      return {
+        pose: {
+          x: lerp(fan.x, featuredCFO.x, t),
+          y: lerp(fan.y, featuredCFO.y, t),
+          rotate: lerp(fan.rotate, featuredCFO.rotate, t),
+          scale: lerp(fan.scale, featuredCFO.scale, t),
+        },
+        opacity: 1,
+      };
+    }
+
+    // Próximamente: stagger por distancia al centro (extremos salen primero)
+    const distFromCenter = Math.abs(slot - 3.5) / 3.5; // 0 (centro) - 1 (extremo)
+    const staggerDelay = (1 - distFromCenter) * 0.30;  // hasta 30% de delay
+    const localT = clamp((tt - staggerDelay) / (1 - staggerDelay), 0, 1);
     const t = smooth(localT);
+
     return {
       pose: {
-        x: lerp(offscreenLeft.x, stack.x, t),
-        y: lerp(offscreenLeft.y, stack.y, t),
-        rotate: lerp(offscreenLeft.rotate, stack.rotate, t),
-        scale: lerp(offscreenLeft.scale, stack.scale, t),
+        x: lerp(fan.x, stackBottomLeft.x, t),
+        y: lerp(fan.y, stackBottomLeft.y, t),
+        rotate: lerp(fan.rotate, stackBottomLeft.rotate, t),
+        scale: lerp(fan.scale, stackBottomLeft.scale, t),
       },
-      opacity: t,
+      opacity: lerp(1, 0.70, t),
     };
   }
-  // EXPAND FINAL: stack → FAN
-  const t = smooth((p - S.enterEnd) / (S.expandEnd - S.enterEnd));
-  return {
-    pose: {
-      x: lerp(stack.x, fan.x, t),
-      y: lerp(stack.y, fan.y, t),
-      rotate: lerp(stack.rotate, fan.rotate, t),
-      scale: lerp(stack.scale, fan.scale, t),
-    },
-    opacity: 1,
-  };
+
+  // STEADY — cards quedan en sus posiciones, headline se lee limpio
+  if (isLead) {
+    return { pose: featuredCFO, opacity: 1 };
+  }
+  return { pose: stackBottomLeft, opacity: 0.70 };
 }
 
 // Dimensiones card (px) — desktop · mobile
